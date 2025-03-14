@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "monitor_specs",
+  "info": {
+    "singularName": "monitor-spec",
+    "pluralName": "monitor-specs",
+    "displayName": "MonitorSpec",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "screen_size": {
+      "type": "integer"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product",
+      "mappedBy": "monitor_spec"
+    },
+    "resolution": {
+      "type": "string"
+    },
+    "refresh_rate": {
+      "type": "integer"
+    },
+    "panel_type": {
+      "type": "string"
+    }
+  }
+}

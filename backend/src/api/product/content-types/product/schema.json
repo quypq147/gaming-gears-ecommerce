@@ -1,0 +1,108 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "products",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ]
+    },
+    "slug": {
+      "type": "uid",
+      "required": true,
+      "targetField": "name"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "products"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "trending": {
+      "type": "boolean"
+    },
+    "sold": {
+      "type": "integer"
+    },
+    "cpu_spec": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::cpu-spec.cpu-spec",
+      "inversedBy": "product"
+    },
+    "headphone_spec": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::headphone-spec.headphone-spec",
+      "inversedBy": "product"
+    },
+    "mouse_pad_spec": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::mouse-pad-spec.mouse-pad-spec",
+      "inversedBy": "product"
+    },
+    "mouse_spec": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::mouse-spec.mouse-spec",
+      "inversedBy": "product"
+    },
+    "vga_spec": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::vga-spec.vga-spec",
+      "inversedBy": "product"
+    },
+    "monitor_spec": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::monitor-spec.monitor-spec",
+      "inversedBy": "product"
+    },
+    "discountPercent": {
+      "type": "integer",
+      "default": 0
+    },
+    "brand": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::brand.brand",
+      "inversedBy": "products"
+    },
+    "key_board_spec": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::key-board-spec.key-board-spec",
+      "mappedBy": "product"
+    }
+  }
+}

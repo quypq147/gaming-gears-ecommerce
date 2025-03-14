@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cpu_specs",
+  "info": {
+    "singularName": "cpu-spec",
+    "pluralName": "cpu-specs",
+    "displayName": "CpuSpec",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "cores": {
+      "type": "integer"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product",
+      "mappedBy": "cpu_spec"
+    },
+    "threads": {
+      "type": "integer"
+    },
+    "base_clock": {
+      "type": "decimal"
+    },
+    "boost_clock": {
+      "type": "decimal"
+    },
+    "cache": {
+      "type": "integer"
+    },
+    "socket": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "key_board_specs",
+  "info": {
+    "singularName": "key-board-spec",
+    "pluralName": "key-board-specs",
+    "displayName": "KeyBoardSpec",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "models": {
+      "type": "string"
+    },
+    "switch": {
+      "type": "string"
+    },
+    "battery_life": {
+      "type": "string"
+    },
+    "led": {
+      "type": "string"
+    },
+    "connectivity": {
+      "type": "string"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product",
+      "inversedBy": "key_board_spec"
+    }
+  }
+}

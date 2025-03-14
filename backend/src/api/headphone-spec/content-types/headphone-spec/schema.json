@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "headphone_specs",
+  "info": {
+    "singularName": "headphone-spec",
+    "pluralName": "headphone-specs",
+    "displayName": "HeadphoneSpec",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "driver_size": {
+      "type": "integer"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product",
+      "mappedBy": "headphone_spec"
+    },
+    "frequency_response": {
+      "type": "string"
+    },
+    "impedance": {
+      "type": "integer"
+    },
+    "connectivity": {
+      "type": "string"
+    },
+    "battery_life": {
+      "type": "integer"
+    }
+  }
+}

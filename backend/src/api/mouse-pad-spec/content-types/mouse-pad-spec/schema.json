@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "mouse_pad_specs",
+  "info": {
+    "singularName": "mouse-pad-spec",
+    "pluralName": "mouse-pad-specs",
+    "displayName": "MousePadSpec",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "models": {
+      "type": "string"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product",
+      "mappedBy": "mouse_pad_spec"
+    },
+    "led": {
+      "type": "string"
+    },
+    "material": {
+      "type": "string"
+    },
+    "anti_slip": {
+      "type": "boolean"
+    }
+  }
+}

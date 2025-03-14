@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vounchers",
+  "info": {
+    "singularName": "vouncher",
+    "pluralName": "vounchers",
+    "displayName": "vouncher"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "vouncher_code": {
+      "type": "string"
+    },
+    "StartTime": {
+      "type": "datetime"
+    },
+    "EndTime": {
+      "type": "datetime"
+    }
+  }
+}

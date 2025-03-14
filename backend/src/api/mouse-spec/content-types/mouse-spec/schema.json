@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "mouse_specs",
+  "info": {
+    "singularName": "mouse-spec",
+    "pluralName": "mouse-specs",
+    "displayName": "MouseSpec",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "dpi": {
+      "type": "integer"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product",
+      "mappedBy": "mouse_spec"
+    },
+    "connectivity": {
+      "type": "string"
+    },
+    "weight": {
+      "type": "integer"
+    },
+    "buttons": {
+      "type": "integer"
+    },
+    "sensor": {
+      "type": "string"
+    }
+  }
+}

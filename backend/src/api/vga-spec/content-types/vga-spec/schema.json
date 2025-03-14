@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vga_specs",
+  "info": {
+    "singularName": "vga-spec",
+    "pluralName": "vga-specs",
+    "displayName": "VgaSpec",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "vram": {
+      "type": "string"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product",
+      "mappedBy": "vga_spec"
+    },
+    "memory_type": {
+      "type": "string"
+    },
+    "core_clock": {
+      "type": "decimal"
+    },
+    "boost_clock": {
+      "type": "decimal"
+    },
+    "power_draw": {
+      "type": "decimal"
+    }
+  }
+}

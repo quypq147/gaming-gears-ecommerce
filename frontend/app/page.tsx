@@ -32,26 +32,17 @@ export async function HomePage() {
     }))
   );
 
-  // Animation variants for Framer Motion
-  const sectionVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  };
-
   return (
     <main className="bg-white">
       <Header />
 
       {/* Hero Section */}
-      <section
-        className="relative px-6 md:px-20 py-6 bg-[url(../assets/bg.jpg)] flex flex-col min-h-screen bg-cover bg-center bg-no-repeat"
-        initial="hidden"
-        animate="visible"
-        variants={sectionVariants}
-      >
+      <section className="relative px-6 md:px-20 py-6 bg-[url(../assets/bg.jpg)] flex flex-col min-h-screen bg-cover bg-center bg-no-repeat">
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="hero-content z-10 flex flex-col p-6 md:p-20 gap-4 text-center md:text-left">
-          <h1 className="font-bold text-white text-4xl md:text-8xl">Gamesome</h1>
+          <h1 className="font-bold text-white text-4xl md:text-8xl">
+            Gamesome
+          </h1>
           <p className="text-white text-lg md:text-xl">
             Upgrade your gaming experience!
           </p>
@@ -64,13 +55,10 @@ export async function HomePage() {
       </section>
 
       {/* Popular Brands Section */}
-      <section
-        className="bg-gray-100 p-4 md:p-6 rounded-lg relative bottom-5 text-center w-11/12 md:w-5/6 mx-auto"
-        initial="hidden"
-        animate="visible"
-        variants={sectionVariants}
-      >
-        <h2 className="text-xl font-semibold mb-4 text-black">Popular Brands</h2>
+      <section className="bg-gray-100 p-4 md:p-6 rounded-lg relative bottom-5 text-center w-11/12 md:w-5/6 mx-auto">
+        <h2 className="text-xl font-semibold mb-4 text-black">
+          Popular Brands
+        </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 justify-center items-center">
           {brands.slice(0, 6).map((brand: any) => (
             <Image
@@ -86,25 +74,17 @@ export async function HomePage() {
       </section>
 
       {/* Top Products Section */}
-      <section
-        className="p-4 md:p-5"
-        initial="hidden"
-        animate="visible"
-        variants={sectionVariants}
-      >
+      <section className="p-4 md:p-5">
         <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black">
           Top Product
         </h2>
-        <ProductList products={products.filter((p: any) => p.trending).slice(0, 4)} />
+        <ProductList
+          products={products.filter((p: any) => p.trending).slice(0, 4)}
+        />
       </section>
 
       {/* Featured Products with Tabs */}
-      <section
-        className="featured-product bg-gray-100 p-4 md:p-6"
-        initial="hidden"
-        animate="visible"
-        variants={sectionVariants}
-      >
+      <section className="featured-product bg-gray-100 p-4 md:p-6">
         <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black">
           If you like
         </h2>
@@ -134,7 +114,7 @@ export async function HomePage() {
           </Link>
         </div>
       </section>
-        
+
       {/* Test Framer Motion */}
       <TestMotion />
       <Footer />
@@ -143,5 +123,3 @@ export async function HomePage() {
 }
 
 export default HomePage;
-
-

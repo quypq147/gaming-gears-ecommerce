@@ -7,9 +7,8 @@ import Header from "@/components/header";
 import ProductList from "@/components/product-list";
 import Footer from "@/components/footer";
 import Link from "next/link";
-import TestMotion from "@/components/TestMotion";
 
-export async function HomePage() {
+const HomePage = async () => {
   const brands = await getBrand();
   const products = await getProducts();
 
@@ -114,9 +113,6 @@ export async function HomePage() {
           </Link>
         </div>
       </section>
-
-      {/* Test Framer Motion */}
-      <TestMotion />
       <Footer />
     </main>
   );

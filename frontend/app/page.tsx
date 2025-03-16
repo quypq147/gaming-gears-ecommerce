@@ -34,7 +34,7 @@ const HomePage = async () => {
   return (
     <main className="bg-white">
       <Header />
-
+      {/* Hero Section TrunHiwu*/}
       {/* Hero Section */}
       <section className="relative px-6 md:px-20 py-6 bg-[url(../assets/bg.jpg)] flex flex-col min-h-screen bg-cover bg-center bg-no-repeat">
         <div className="absolute inset-0 bg-black/50"></div>

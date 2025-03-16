@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import placeholderImg from "@/assets/placeholder.png";
+import { Toaster, toast } from "react-hot-toast";
+import { Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { Toaster, toast } from "react-hot-toast";
+import placeholderImg from "@/assets/placeholder.png";
 
 export default function ProductClient({ product }: { product: any }) {
   const [wishlist, setWishlist] = useState<string[]>([]);
@@ -62,52 +63,34 @@ export default function ProductClient({ product }: { product: any }) {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  /** ✅ Render Product Description */
-  const renderDescription = () => {
-    if (!product.description?.length) return <p>No description available.</p>;
-
-    return product.description.map((block: any, index: number) => {
-      if (block.type === "heading") {
-        return (
-          <h2 key={index} className="text-xl font-semibold mt-4">
-            {block.children.map((child: any) => child.text).join(" ")}
-          </h2>
-        );
-      }
-      return (
-        <p key={index} className="text-gray-700">
-          {block.children.map((child: any) =>
-            child.bold ? <strong key={child.text}>{child.text} </strong> : child.text
-          )}
-        </p>
-      );
-    });
-  };
-
   /** ✅ Render Product Specifications */
   const renderSpecifications = () => {
-    const specCategories = [
-      "vga_spec",
-      "mouse_spec",
-      "mouse_pad_spec",
-      "keyboard_spec",
-      "cpu_spec",
-      "headphone_spec",
-    ];
+    const specTypes: Record<string, string[]> = {
+      cpu_spec: ["cores", "threads", "socket", "cache", "base_clock"],
+      vga_spec: ["memory", "clock_speed", "cuda_cores", "interface"],
+      keyboard_spec: ["switch_type", "backlight", "connectivity"],
+      mouse_spec: ["dpi", "sensor", "weight"],
+      headphone_spec: ["driver_size", "frequency_range", "noise_cancellation"],
+    };
 
-    return specCategories.map((specKey) => {
+    return Object.keys(specTypes).map((specKey) => {
       const specData = product[specKey];
       if (!specData) return null;
 
       return (
-        <div key={specKey} className="mt-4">
-          <h3 className="text-lg font-bold capitalize">{specKey.replace("_", " ")}:</h3>
-          <ul className="list-disc pl-5 text-gray-700">
-            {Object.entries(specData).map(([key, value]) => (
-              <li key={key}>
-                <span className="font-semibold capitalize">{key.replace("_", " ")}:</span> {String(value)}
-              </li>
-            ))}
+        <div key={specKey} className="mt-4 bg-gray-100 p-4 rounded-lg shadow-sm">
+          <h3 className="text-lg font-bold capitalize text-gray-900">
+            {specKey.replace("_", " ")}:
+          </h3>
+          <ul className="grid grid-cols-2 gap-2 mt-2 text-gray-700">
+            {specTypes[specKey].map((key) =>
+              specData[key] ? (
+                <li key={key} className="flex justify-between">
+                  <span className="font-medium capitalize">{key.replace("_", " ")}:</span>
+                  <span className="text-gray-900">{String(specData[key])}</span>
+                </li>
+              ) : null
+            )}
           </ul>
         </div>
       );
@@ -119,46 +102,44 @@ export default function ProductClient({ product }: { product: any }) {
       <Header />
       <Toaster position="top-right" />
       <main className="container min-h-screen p-6">
-        <section className="flex flex-col md:flex-row gap-6 relative">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* ✅ Product Image */}
-          <div className="w-full md:w-1/2 relative">
+          <div className="relative w-full">
             <Image
               src={imageUrl}
               alt={product.name}
               width={500}
               height={500}
-              className="rounded-lg object-cover"
+              className="rounded-lg object-cover shadow-md"
               priority
             />
             <button
               onClick={toggleWishlist}
               aria-label="Toggle Wishlist"
-              className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${
+              className={`absolute top-4 right-4 p-2 rounded-full transition-all bg-white shadow-md ${
                 wishlist.includes(product.slug) ? "text-red-500" : "text-gray-500"
               }`}
             >
-              ❤️
+              <Heart size={24} />
             </button>
           </div>
 
           {/* ✅ Product Details */}
-          <div className="w-full md:w-1/2">
-            <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-            <p className="text-gray-600 mb-4 capitalize font-bold">
+          <div className="flex flex-col">
+            <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
+            <p className="text-gray-600 font-medium text-lg capitalize mt-2">
               {product.brand?.brand_name?.toUpperCase() || "Unknown Brand"}
             </p>
-            <Button onClick={addToCart} className="w-full md:w-auto">
-              Add To Cart
-            </Button>
+
+            <div className="mt-4 flex gap-4">
+              <Button onClick={addToCart} className="flex items-center gap-2">
+                <ShoppingCart size={20} />
+                Add To Cart
+              </Button>
+            </div>
 
             {/* ✅ Product Specifications */}
-            {renderSpecifications()}
-
-            {/* ✅ Product Description */}
-            <div className="mt-6">
-              <h2 className="text-xl font-bold mb-2">Product Description:</h2>
-              {renderDescription()}
-            </div>
+            <div className="mt-6">{renderSpecifications()}</div>
           </div>
         </section>
       </main>
@@ -166,6 +147,7 @@ export default function ProductClient({ product }: { product: any }) {
     </>
   );
 }
+
 
 
 

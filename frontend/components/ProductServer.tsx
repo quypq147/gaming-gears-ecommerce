@@ -6,7 +6,7 @@ import { Metadata } from "next";
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: { slug?: string };
 }): Promise<Metadata> {
   if (!params?.slug) return {};
 
@@ -29,7 +29,7 @@ export async function generateMetadata({
 export default async function ProductServer({
   params,
 }: {
-  params: { slug: string };
+  params: { slug?: string };
 }) {
   if (!params?.slug) return notFound();
 

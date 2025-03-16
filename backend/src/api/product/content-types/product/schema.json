@@ -103,6 +103,12 @@
       "relation": "oneToOne",
       "target": "api::key-board-spec.key-board-spec",
       "mappedBy": "product"
+    },
+    "rating_products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::rating-product.rating-product",
+      "mappedBy": "product"
     }
   }
 }

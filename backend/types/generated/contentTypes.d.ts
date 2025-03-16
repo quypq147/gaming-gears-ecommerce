@@ -686,6 +686,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     quantity: Schema.Attribute.Integer;
+    rating_products: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::rating-product.rating-product'
+    >;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     sold: Schema.Attribute.Integer;
     trending: Schema.Attribute.Boolean;
@@ -693,6 +697,45 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     vga_spec: Schema.Attribute.Relation<'oneToOne', 'api::vga-spec.vga-spec'>;
+  };
+}
+
+export interface ApiRatingProductRatingProduct
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'rating_products';
+  info: {
+    displayName: 'RatingProduct';
+    pluralName: 'rating-products';
+    singularName: 'rating-product';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::rating-product.rating-product'
+    > &
+      Schema.Attribute.Private;
+    product: Schema.Attribute.Relation<'manyToOne', 'api::product.product'>;
+    publishedAt: Schema.Attribute.DateTime;
+    Rating: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 1;
+        },
+        number
+      >;
+    Review: Schema.Attribute.Text;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1278,6 +1321,7 @@ declare module '@strapi/strapi' {
       'api::mouse-pad-spec.mouse-pad-spec': ApiMousePadSpecMousePadSpec;
       'api::mouse-spec.mouse-spec': ApiMouseSpecMouseSpec;
       'api::product.product': ApiProductProduct;
+      'api::rating-product.rating-product': ApiRatingProductRatingProduct;
       'api::vga-spec.vga-spec': ApiVgaSpecVgaSpec;
       'api::vouncher.vouncher': ApiVouncherVouncher;
       'plugin::content-releases.release': PluginContentReleasesRelease;

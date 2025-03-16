@@ -24,8 +24,3 @@ jobs:
       - name: Build Strapi
         run: npm run build
         working-directory: ./backend
-
-      - name: Deploy to Railway
-        uses: railwayapp/railway-deploy-action@1.2.0
-        with:
-          railway_api_token: ${{ secrets.RAILWAY_API_TOKEN }}

@@ -3,14 +3,7 @@ import { Inter } from "next/font/google";
 import { WishlistCartProvider } from "@/context/WishlistCartContext";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,23 +22,14 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en">
-    <header className="flex justify-end items-center p-4 gap-4 h-16">
-            <SignedOut>
-              <SignInButton />
-              <SignUpButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </header>
-      <body className={`${inter} antialiased`}>
-        <WishlistCartProvider>
-          {children}
-          <Toaster position="top-right" reverseOrder={false} />
-        </WishlistCartProvider>
-      </body>
-    </html>
+      <html lang="en">
+        <body className={`${inter} antialiased`}>
+          <WishlistCartProvider>
+            {children}
+            <Toaster position="top-right" reverseOrder={false} />
+          </WishlistCartProvider>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }

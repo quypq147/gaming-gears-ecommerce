@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ShoppingCart, Heart, Menu, X } from "lucide-react";
+import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
 
 function Nav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,16 +47,27 @@ function Nav() {
           </Link>
         </li>
 
-        <li>
-          <Link href="/login">
-            <Button className="text-white cursor-pointer">Login</Button>
-          </Link>
-        </li>
+        {/* Signed Out (Show Login Button) */}
+        <SignedOut>
+          <li>
+            <Link href="/sign-in">
+              <Button className="text-white cursor-pointer">Login</Button>
+            </Link>
+          </li>
+        </SignedOut>
+
+        {/* Signed In (Show Profile & Sign Out) */}
+        <SignedIn>
+          <li>
+            <UserButton afterSignOutUrl="/" />
+          </li>
+        </SignedIn>
       </ul>
     </nav>
   );
 }
 
 export default Nav;
+
 
 

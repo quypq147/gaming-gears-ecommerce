@@ -5,8 +5,10 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { ShoppingCart, Heart, Menu, X } from "lucide-react";
 import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { useUser, SignOutButton } from "@clerk/nextjs";
 
 function Nav() {
+  const { isSignedIn } = useUser();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -48,20 +50,19 @@ function Nav() {
         </li>
 
         {/* Signed Out (Show Login Button) */}
-        <SignedOut>
+        {isSignedIn ?(
+          <li>
+            <SignOutButton>
+              <Button className="text-white cursor-pointer">Sign Out</Button>
+            </SignOutButton>
+          </li>
+        ):(
           <li>
             <Link href="/sign-in">
-              <Button className="text-white cursor-pointer">Login</Button>
+              <Button className="text-white cursor-pointer">Sign In</Button>
             </Link>
           </li>
-        </SignedOut>
-
-        {/* Signed In (Show Profile & Sign Out) */}
-        <SignedIn>
-          <li>
-            <UserButton afterSignOutUrl="/" />
-          </li>
-        </SignedIn>
+        )}
       </ul>
     </nav>
   );

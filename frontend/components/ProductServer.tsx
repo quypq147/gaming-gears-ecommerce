@@ -15,10 +15,12 @@ export async function generateMetadata({
 
   return {
     title: product.name,
-    description: product.description || "Find great deals on high-quality products.",
+    description:
+      product.description || "Find great deals on high-quality products.",
     openGraph: {
       title: product.name,
-      description: product.description || "Find great deals on high-quality products.",
+      description:
+        product.description || "Find great deals on high-quality products.",
       images: product.image?.length
         ? [`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${product.image[0].url}`]
         : [],

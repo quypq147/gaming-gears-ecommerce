@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect , use } from "react";
 import Image from "next/image";
 import { Toaster, toast } from "react-hot-toast";
 import { Heart, ShoppingCart } from "lucide-react";

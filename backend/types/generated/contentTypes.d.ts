@@ -635,6 +635,42 @@ export interface ApiMouseSpecMouseSpec extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiOrdersCollectionOrdersCollection
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'orders_collections';
+  info: {
+    description: '';
+    displayName: 'Orders';
+    pluralName: 'orders-collections';
+    singularName: 'orders-collection';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    address: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    customerName: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::orders-collection.orders-collection'
+    > &
+      Schema.Attribute.Private;
+    paymentMethod: Schema.Attribute.Enumeration<
+      ['cod', 'credit_card', 'paypal']
+    >;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
+    publishedAt: Schema.Attribute.DateTime;
+    totalAmount: Schema.Attribute.Decimal;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   collectionName: 'products';
   info: {
@@ -683,6 +719,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'api::mouse-spec.mouse-spec'
     >;
     name: Schema.Attribute.String & Schema.Attribute.Required;
+    orders_collection: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::orders-collection.orders-collection'
+    >;
     price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     quantity: Schema.Attribute.Integer;
@@ -776,6 +816,7 @@ export interface ApiVgaSpecVgaSpec extends Struct.CollectionTypeSchema {
 export interface ApiVouncherVouncher extends Struct.CollectionTypeSchema {
   collectionName: 'vounchers';
   info: {
+    description: '';
     displayName: 'vouncher';
     pluralName: 'vounchers';
     singularName: 'vouncher';
@@ -787,7 +828,9 @@ export interface ApiVouncherVouncher extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    discount: Schema.Attribute.Integer;
     EndTime: Schema.Attribute.DateTime;
+    isActive: Schema.Attribute.Boolean;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1258,9 +1301,9 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
+    avatar: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -1320,6 +1363,7 @@ declare module '@strapi/strapi' {
       'api::monitor-spec.monitor-spec': ApiMonitorSpecMonitorSpec;
       'api::mouse-pad-spec.mouse-pad-spec': ApiMousePadSpecMousePadSpec;
       'api::mouse-spec.mouse-spec': ApiMouseSpecMouseSpec;
+      'api::orders-collection.orders-collection': ApiOrdersCollectionOrdersCollection;
       'api::product.product': ApiProductProduct;
       'api::rating-product.rating-product': ApiRatingProductRatingProduct;
       'api::vga-spec.vga-spec': ApiVgaSpecVgaSpec;

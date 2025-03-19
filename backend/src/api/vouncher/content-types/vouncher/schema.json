@@ -4,7 +4,8 @@
   "info": {
     "singularName": "vouncher",
     "pluralName": "vounchers",
-    "displayName": "vouncher"
+    "displayName": "vouncher",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -18,6 +19,12 @@
     },
     "EndTime": {
       "type": "datetime"
+    },
+    "discount": {
+      "type": "integer"
+    },
+    "isActive": {
+      "type": "boolean"
     }
   }
 }

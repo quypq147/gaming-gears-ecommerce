@@ -3,14 +3,20 @@
 import { useWishlistCartStore } from "@/app/store/useWishlistCartStore";
 import Header from "@/components/header";
 import ProductDetails from "@/components/product-details";
+import getVounchers from "../api/getVouncher";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
   const { cart, removeFromCart, updateCartQuantity } = useWishlistCartStore();
   const [couponCode, setCouponCode] = useState("");
+  const [vouchers, setVouchers] = useState([]);
+  const [discount, setDiscount] = useState(0);
+  const [errors, setErrors] = useState([]);
 
+  const router = useRouter();
   // Calculate totals with rounding to prevent floating-point errors
   const subtotal = cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
   const salesTax = Math.round(subtotal * 0.1);
@@ -101,7 +107,7 @@ export default function CartPage() {
               <p className="text-green-600 text-sm mt-4">🎉 Congrats, you’re eligible for Free Shipping</p>
               
               {/* Checkout Button */}
-              <Button className="w-full mt-6">Proceed to Checkout</Button>
+              <Button className="w-full mt-6" onClick={() =>router.push("/checkout")}>Proceed to Checkout</Button>
             </div>
           </div>
         )}

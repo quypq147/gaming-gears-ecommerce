@@ -109,6 +109,12 @@
       "relation": "oneToMany",
       "target": "api::rating-product.rating-product",
       "mappedBy": "product"
+    },
+    "orders_collection": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::orders-collection.orders-collection",
+      "inversedBy": "products"
     }
   }
 }

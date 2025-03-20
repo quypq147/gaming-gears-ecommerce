@@ -21,6 +21,16 @@ export default function CheckoutPage() {
   const salesTax = Math.round(subtotal * 0.1);
   const grandTotal = subtotal + salesTax;
 
+  // Generate Order Code
+  const generateOrderCode = () => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let code = "";
+    for (let i = 0; i < 8; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+  };
+
   // Handle Order Submission
   const handleOrderSubmit = async () => {
     if (!name || !address) {
@@ -31,12 +41,13 @@ export default function CheckoutPage() {
     setIsSubmitting(true);
 
     const orderData = {
+      orderCode: generateOrderCode(),
       customerName: name,
       address,
       paymentMethod,
       totalAmount: grandTotal,
-      items: cart.map((product) => ({
-        productId: product.id,
+      products: cart.map((product) => ({
+        id: product.id,
         quantity: product.quantity,
         price: product.price,
       })),
@@ -54,8 +65,8 @@ export default function CheckoutPage() {
       if (!res.ok) throw new Error("Failed to place order");
 
       alert("Order placed successfully!");
-      clearCart(); // Clear cart after successful checkout
-      router.push("/order-success"); // Redirect to success page
+      clearCart();
+      router.push("/order-success");
     } catch (error) {
       alert("Error placing order. Please try again.");
     } finally {
@@ -141,6 +152,7 @@ export default function CheckoutPage() {
                 <option value="cod">Cash on Delivery (COD)</option>
                 <option value="credit_card">Credit Card</option>
                 <option value="paypal">PayPal</option>
+                <option value="momo">MoMo</option>
               </select>
             </div>
 
@@ -154,4 +166,5 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
 

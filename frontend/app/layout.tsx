@@ -4,6 +4,7 @@ import { WishlistCartProvider } from "@/context/WishlistCartContext";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { ClerkProvider } from "@clerk/nextjs";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -26,6 +27,7 @@ export default function RootLayout({
         <body className={`${inter} antialiased`}>
           <WishlistCartProvider>
             {children}
+
             <Toaster position="top-right" reverseOrder={false} />
           </WishlistCartProvider>
         </body>

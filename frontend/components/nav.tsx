@@ -4,15 +4,14 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ShoppingCart, Heart, Menu, X } from "lucide-react";
-import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
-import { useUser, SignOutButton } from "@clerk/nextjs";
+import { UserButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 
 function Nav() {
   const { isSignedIn } = useUser();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="flex justify-between items-center p-4 bg-black text-white z-99">
+    <nav className="flex justify-between items-center p-4 bg-black text-white z-50">
       {/* Mobile Menu Button */}
       <button
         className="md:hidden text-white"
@@ -50,25 +49,27 @@ function Nav() {
         </li>
 
         {/* Signed Out (Show Login Button) */}
-        {isSignedIn ?(
-          <li>
-            <SignOutButton>
-              <Button className="text-white cursor-pointer">Sign Out</Button>
-            </SignOutButton>
-          </li>
-        ):(
+        <SignedOut>
           <li>
             <Link href="/sign-in">
               <Button className="text-white cursor-pointer">Sign In</Button>
             </Link>
           </li>
-        )}
+        </SignedOut>
+
+        {/* Signed In (Show Avatar Button) */}
+        <SignedIn>
+          <li>
+            <UserButton afterSignOutUrl="/" />
+          </li>
+        </SignedIn>
       </ul>
     </nav>
   );
 }
 
 export default Nav;
+
 
 
 

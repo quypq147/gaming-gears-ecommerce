@@ -649,6 +649,7 @@ export interface ApiOrdersCollectionOrdersCollection
   };
   attributes: {
     address: Schema.Attribute.Text;
+    createAt: Schema.Attribute.DateTime;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -659,6 +660,9 @@ export interface ApiOrdersCollectionOrdersCollection
       'api::orders-collection.orders-collection'
     > &
       Schema.Attribute.Private;
+    orderCode: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     paymentMethod: Schema.Attribute.Enumeration<
       ['cod', 'credit_card', 'paypal']
     >;

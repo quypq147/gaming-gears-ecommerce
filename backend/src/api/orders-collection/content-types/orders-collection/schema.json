@@ -33,6 +33,14 @@
       "relation": "oneToMany",
       "target": "api::product.product",
       "mappedBy": "orders_collection"
+    },
+    "createAt": {
+      "type": "datetime"
+    },
+    "orderCode": {
+      "type": "string",
+      "unique": true,
+      "required": true
     }
   }
 }

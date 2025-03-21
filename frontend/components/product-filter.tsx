@@ -8,10 +8,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
 
 interface FilterOption {
   brand: string;
   category: string;
+  price: number;
+  search: string;
 }
 
 interface ProductFilterProps {
@@ -27,25 +31,26 @@ export default function ProductFilter({
 }: ProductFilterProps) {
   const [selectBrand, setSelectBrand] = useState<string>("");
   const [selectCategory, setSelectCategory] = useState<string>("");
+  const [price, setPrice] = useState<number>(1000); // Default max price
+  const [search, setSearch] = useState<string>("");
 
-  // Update filter whenever selection changes
   useEffect(() => {
-    onFilter({ brand: selectBrand, category: selectCategory });
-  }, [onFilter, selectBrand, selectCategory]);
-
-  // Handle "All" option to reset filter values
-  const handleBrandChange = (value: string) => {
-    setSelectBrand(value === "All" ? "" : value);
-  };
-
-  const handleCategoryChange = (value: string) => {
-    setSelectCategory(value === "All" ? "" : value);
-  };
+    onFilter({ brand: selectBrand, category: selectCategory, price, search });
+  }, [onFilter, selectBrand, selectCategory, price, search]);
 
   return (
     <div className="flex flex-wrap gap-4 items-center justify-center my-4">
+      {/* Search Bar */}
+      <Input
+        type="text"
+        placeholder="Search product..."
+        className="w-60"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
       {/* Brand Filter */}
-      <Select onValueChange={handleBrandChange}>
+      <Select onValueChange={(value) => setSelectBrand(value === "All" ? "" : value)}>
         <SelectTrigger className="w-40">
           <SelectValue placeholder="Select Brand" />
         </SelectTrigger>
@@ -53,28 +58,40 @@ export default function ProductFilter({
           <SelectItem value="All">All</SelectItem>
           {brands.map((brand, idx) => (
             <SelectItem key={idx} value={brand}>
-              {brand.toLocaleUpperCase()}
+              {brand.toUpperCase()}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
 
       {/* Category Filter */}
-      <Select onValueChange={handleCategoryChange}>
+      <Select onValueChange={(value) => setSelectCategory(value === "All" ? "" : value)}>
         <SelectTrigger className="w-40">
           <SelectValue placeholder="Select Category" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="All" className="font-bold">
-            All
-          </SelectItem>
+          <SelectItem value="All">All</SelectItem>
           {categories.map((cat, idx) => (
-            <SelectItem key={idx} value={cat || ""} className="font-bold">
+            <SelectItem key={idx} value={cat?.name}>
               {cat ? cat.toUpperCase() : "Unknown Category"}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
+
+      {/* Price Slider */}
+      <div className="flex flex-col items-center">
+        <span className="text-sm font-medium">Max Price: ${price}</span>
+        <Slider
+          value={[price]}
+          onValueChange={(val) => setPrice(val[0])}
+          min={0}
+          max={5000}
+          step={50}
+          className="w-40"
+        />
+      </div>
     </div>
   );
 }
+

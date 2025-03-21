@@ -10,21 +10,21 @@ import ToastNotification, { showToast } from "@/components/ToastNotification";
 export default function WishlistPage() {
   const { wishlist, removeFromWishlist, addToCart } = useWishlistCartStore();
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product: any) => {
     addToCart(product);
     const imageUrl =
       product.image?.length > 0
         ? `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${product.image[0].url}`
-        : placeholderImg;
+        : placeholderImg.src;
     showToast(`${product.name} added to cart!`, "success", imageUrl);
   };
 
-  const handleRemoveFromWishlist = (product) => {
+  const handleRemoveFromWishlist = (product : any) => {
     removeFromWishlist(product.id);
     const imageUrl =
       product.image?.length > 0
         ? `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${product.image[0].url}`
-        : placeholderImg;
+        : placeholderImg.src;
     showToast(`${product.name} removed from wishlist!`, "error", imageUrl);
   };
 

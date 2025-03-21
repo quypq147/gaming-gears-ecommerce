@@ -1,14 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ShoppingCart, Heart, Menu, X } from "lucide-react";
-import { UserButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 function Nav() {
-  const { isSignedIn } = useUser();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    setIsSignedIn(!!token);
+  }, []);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("jwt");
+    setIsSignedIn(false);
+    router.push("/");
+  };
 
   return (
     <nav className="flex justify-between items-center p-4 bg-black text-white z-50">
@@ -48,27 +60,28 @@ function Nav() {
           </Link>
         </li>
 
-        {/* Signed Out (Show Login Button) */}
-        <SignedOut>
+        {isSignedIn ? (
+          // Show Logout Button
+          <li>
+            <Button onClick={handleSignOut} className="text-white cursor-pointer">
+              Sign Out
+            </Button>
+          </li>
+        ) : (
+          // Show Login Button
           <li>
             <Link href="/sign-in">
               <Button className="text-white cursor-pointer">Sign In</Button>
             </Link>
           </li>
-        </SignedOut>
-
-        {/* Signed In (Show Avatar Button) */}
-        <SignedIn>
-          <li>
-            <UserButton afterSignOutUrl="/" />
-          </li>
-        </SignedIn>
+        )}
       </ul>
     </nav>
   );
 }
 
 export default Nav;
+
 
 
 

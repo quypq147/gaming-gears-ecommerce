@@ -635,6 +635,38 @@ export interface ApiMouseSpecMouseSpec extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiOrderHistoryOrderHistory
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'order_histories';
+  info: {
+    displayName: 'OrderHistory';
+    pluralName: 'order-histories';
+    singularName: 'order-history';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::order-history.order-history'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::orders-collection.orders-collection'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiOrdersCollectionOrdersCollection
   extends Struct.CollectionTypeSchema {
   collectionName: 'orders_collections';
@@ -660,6 +692,10 @@ export interface ApiOrdersCollectionOrdersCollection
       'api::orders-collection.orders-collection'
     > &
       Schema.Attribute.Private;
+    order_history: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::order-history.order-history'
+    >;
     orderCode: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
@@ -668,6 +704,7 @@ export interface ApiOrdersCollectionOrdersCollection
     >;
     products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
+    state: Schema.Attribute.Enumeration<['pending', 'completed', 'cancelled']>;
     totalAmount: Schema.Attribute.Decimal;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -741,6 +778,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     vga_spec: Schema.Attribute.Relation<'oneToOne', 'api::vga-spec.vga-spec'>;
+    wishlists: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::wishlist.wishlist'
+    >;
   };
 }
 
@@ -847,6 +888,38 @@ export interface ApiVouncherVouncher extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     vouncher_code: Schema.Attribute.String;
+  };
+}
+
+export interface ApiWishlistWishlist extends Struct.CollectionTypeSchema {
+  collectionName: 'wishlists';
+  info: {
+    displayName: 'Wishlist';
+    pluralName: 'wishlists';
+    singularName: 'wishlist';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::wishlist.wishlist'
+    > &
+      Schema.Attribute.Private;
+    products: Schema.Attribute.Relation<'manyToMany', 'api::product.product'>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -1346,6 +1419,7 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 3;
       }>;
+    wishlists: Schema.Attribute.Relation<'oneToMany', 'api::wishlist.wishlist'>;
   };
 }
 
@@ -1367,11 +1441,13 @@ declare module '@strapi/strapi' {
       'api::monitor-spec.monitor-spec': ApiMonitorSpecMonitorSpec;
       'api::mouse-pad-spec.mouse-pad-spec': ApiMousePadSpecMousePadSpec;
       'api::mouse-spec.mouse-spec': ApiMouseSpecMouseSpec;
+      'api::order-history.order-history': ApiOrderHistoryOrderHistory;
       'api::orders-collection.orders-collection': ApiOrdersCollectionOrdersCollection;
       'api::product.product': ApiProductProduct;
       'api::rating-product.rating-product': ApiRatingProductRatingProduct;
       'api::vga-spec.vga-spec': ApiVgaSpecVgaSpec;
       'api::vouncher.vouncher': ApiVouncherVouncher;
+      'api::wishlist.wishlist': ApiWishlistWishlist;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

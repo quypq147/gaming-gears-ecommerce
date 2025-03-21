@@ -6,7 +6,6 @@ import updateOrder from "@/app/api/updateOrder";
 import { Button } from "@/components/ui/button";
 import { Select, SelectItem } from "@nextui-org/react";
 import { toast } from "react-hot-toast";
-import { useUser } from "@clerk/nextjs";
 
 export default function StaffOrders() {
   const { user } = useUser();

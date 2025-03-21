@@ -1,37 +1,40 @@
-import { clerkMiddleware, getAuth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export default clerkMiddleware((req) => {
-  const { userId, sessionClaims } = getAuth(req);
-  const url = req.nextUrl;
+export function middleware(req: NextRequest) {
+  const token = req.cookies.get("jwt")?.value || localStorage.getItem("jwt");
 
-  // ✅ Redirect to sign-in page if user is not logged in
-  if (!userId) {
+  if (!token) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
-  // ✅ Get user role from Clerk's session (ensure safe access)
-  const role = sessionClaims?.publicMetadata?.role as string | undefined; 
+  // Validate the JWT with Strapi
+  return fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users/me`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((res) => res.json())
+    .then((user) => {
+      if (!user.id) {
+        return NextResponse.redirect(new URL("/sign-in", req.url));
+      }
 
-  // 🔥 Ensure 'role' exists before checking permissions
-  if (!role) {
-    return NextResponse.redirect(new URL("/", req.url)); // If no role, deny access
-  }
+      const url = req.nextUrl;
 
-  // 🔒 Restrict access based on role
-  if (url.pathname.startsWith("/admin") && role !== "admin") {
-    return NextResponse.redirect(new URL("/", req.url)); // Redirect non-admins
-  }
+      // Redirect users based on role
+      if (url.pathname.startsWith("/admin") && user.role.name !== "admin") {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
 
-  if (url.pathname.startsWith("/staff") && !["staff", "admin"].includes(role)) {
-    return NextResponse.redirect(new URL("/", req.url)); // Only staff and admins can access
-  }
+      if (url.pathname.startsWith("/staff") && !["staff", "admin"].includes(user.role.name)) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
 
-  return NextResponse.next();
-});
+      return NextResponse.next();
+    })
+    .catch(() => NextResponse.redirect(new URL("/sign-in", req.url)));
+}
 
-// 🔥 Apply middleware to specific paths only
 export const config = {
-  matcher: ["/admin/:path*", "/staff/:path*"], // Protect these paths
+  matcher: ["/admin/:path*", "/staff/:path*"],
 };
+
 

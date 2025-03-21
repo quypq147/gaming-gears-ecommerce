@@ -41,6 +41,20 @@
       "type": "string",
       "unique": true,
       "required": true
+    },
+    "order_history": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::order-history.order-history",
+      "mappedBy": "order"
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "completed",
+        "cancelled"
+      ]
     }
   }
 }

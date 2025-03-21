@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import { WishlistCartProvider } from "@/context/WishlistCartContext";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import { ClerkProvider } from "@clerk/nextjs";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 const inter = Inter({
@@ -22,16 +21,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${inter} antialiased`}>
-          <WishlistCartProvider>
-            {children}
+    <html lang="en">
+      <body className={`${inter} antialiased`}>
+        <WishlistCartProvider>
+          {children}
 
-            <Toaster position="top-right" reverseOrder={false} />
-          </WishlistCartProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+          <Toaster position="top-right" reverseOrder={false} />
+        </WishlistCartProvider>
+      </body>
+    </html>
   );
 }

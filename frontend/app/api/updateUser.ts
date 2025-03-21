@@ -6,7 +6,7 @@ export default async function updateUser(userId: string, updatedData: any) {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`, // Thêm token nếu API yêu cầu
+            Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
         body: JSON.stringify(updatedData),
     });

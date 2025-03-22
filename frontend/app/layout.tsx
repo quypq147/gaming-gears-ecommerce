@@ -4,6 +4,7 @@ import { WishlistCartProvider } from "@/context/WishlistCartContext";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({
   variable: "--font-inter",

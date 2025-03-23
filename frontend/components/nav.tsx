@@ -1,26 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { ShoppingCart, Heart, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ShoppingCart, Heart, Menu, X, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
+import { SessionProvider } from "next-auth/react"; // Nhập SessionProvider
+import Image from "next/image";
 
-function Nav() {
+function NavContent() {
   const router = useRouter();
+  const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
-  const [isSignedIn, setIsSignedIn] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    setIsSignedIn(!!token);
-  }, []);
-
-  const handleSignOut = () => {
-    localStorage.removeItem("jwt");
-    setIsSignedIn(false);
-    router.push("/");
-  };
 
   return (
     <nav className="flex justify-between items-center p-4 bg-black text-white z-50">
@@ -60,15 +52,29 @@ function Nav() {
           </Link>
         </li>
 
-        {isSignedIn ? (
-          // Show Logout Button
-          <li>
-            <Button onClick={handleSignOut} className="text-white cursor-pointer">
-              Sign Out
-            </Button>
-          </li>
+        {session ? (
+          <>
+            {/* Hiển thị Avatar User */}
+            <li>
+              {session?.user?.image ? (
+                <Image
+                  src={session.user.image}
+                  alt="User Avatar"
+                  className="w-8 h-8 rounded-full border border-gray-500"
+                />
+              ) : (
+                <User className="w-6 h-6 text-white cursor-pointer hover:text-gray-300" />
+              )}
+            </li>
+            {/* Nút Đăng Xuất */}
+            <li>
+              <Button onClick={() => signOut()} className="text-white cursor-pointer">
+                Sign Out
+              </Button>
+            </li>
+          </>
         ) : (
-          // Show Login Button
+          // Nút Đăng Nhập
           <li>
             <Link href="/sign-in">
               <Button className="text-white cursor-pointer">Sign In</Button>
@@ -80,7 +86,17 @@ function Nav() {
   );
 }
 
-export default Nav;
+export default function Nav() {
+  return (
+    <SessionProvider>
+      <NavContent />
+    </SessionProvider>
+  );
+}
+
+
+
+
 
 
 

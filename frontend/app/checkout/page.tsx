@@ -130,7 +130,6 @@ export default function CheckoutPage() {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
-
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">Shipping Address</label>
               <input

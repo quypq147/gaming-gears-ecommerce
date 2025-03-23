@@ -66,20 +66,24 @@
       "configurable": false
     },
     "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "wishlists": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::wishlist.wishlist",
       "mappedBy": "users_permissions_user"
+    },
+    "address": {
+      "type": "text"
     }
   }
 }

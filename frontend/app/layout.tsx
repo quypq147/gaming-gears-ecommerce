@@ -24,11 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter} antialiased`}>
-        <WishlistCartProvider>
-          {children}
+        
+          <WishlistCartProvider>
+            {children}
 
-          <Toaster position="top-right" reverseOrder={false} />
-        </WishlistCartProvider>
+            <Toaster position="top-right" reverseOrder={false} />
+          </WishlistCartProvider>
       </body>
     </html>
   );

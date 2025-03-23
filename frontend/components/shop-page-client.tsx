@@ -1,40 +1,41 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import Header from "@/components/header";
 import ProductCard from "@/components/product-card";
 import ProductFilter from "@/components/product-filter";
 
 export default function ShopPageClient({ products = [] }) {
+  const [allProducts] = useState(products);
   const [filteredProducts, setFilteredProducts] = useState(products);
 
-  // Memoized brands and categories extraction
+  useEffect(() => {
+    setFilteredProducts(products);
+  }, [products]);
+
+  // Memoized brands and categories extraction (lowercased for consistency)
   const brands = useMemo(
-    () => [...new Set(products.map((p) => p.brand?.brand_name).filter(Boolean))],
+    () => [...new Set(products.map((p) => p.brand?.brand_name?.toLowerCase()).filter(Boolean))],
     [products]
   );
 
   const categories = useMemo(
-    () => [...new Set(products.map((p) => p.category?.name).filter(Boolean))],
+    () => [...new Set(products.map((p) => p.category?.name?.toLowerCase()).filter(Boolean))],
     [products]
   );
 
   // Optimized filtering function
   const handleFilter = useCallback(
     ({ brand, category }) => {
-      if (!products.length) return;
-
       setFilteredProducts(
-        products.filter(
+        allProducts.filter(
           (product) =>
-            (!brand ||
-              product.brand?.brand_name?.toLowerCase() === brand.toLowerCase()) &&
-            (!category ||
-              product.category?.name?.toLowerCase() === category.toLowerCase())
+            (!brand || product.brand?.brand_name?.toLowerCase() === brand) &&
+            (!category || product.category?.name?.toLowerCase() === category)
         )
       );
     },
-    [products]
+    [allProducts]
   );
 
   return (

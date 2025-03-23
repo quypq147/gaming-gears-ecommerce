@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart, Heart, Menu, X, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { SessionProvider } from "next-auth/react"; // Nhập SessionProvider
+import { SessionProvider } from "next-auth/react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 
 function NavContent() {
@@ -54,23 +55,35 @@ function NavContent() {
 
         {session ? (
           <>
-            {/* Hiển thị Avatar User */}
+            {/* Dropdown Menu */}
             <li>
-              {session?.user?.image ? (
-                <Image
-                  src={session.user.image}
-                  alt="User Avatar"
-                  className="w-8 h-8 rounded-full border border-gray-500"
-                />
-              ) : (
-                <User className="w-6 h-6 text-white cursor-pointer hover:text-gray-300" />
-              )}
-            </li>
-            {/* Nút Đăng Xuất */}
-            <li>
-              <Button onClick={() => signOut()} className="text-white cursor-pointer">
-                Sign Out
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center">
+                    {session?.user?.image ? (
+                      <Image
+                        src={session.user.image}
+                        alt="User Avatar"
+                        width={32}
+                        height={32}
+                        className="w-8 h-8 rounded-full border border-gray-500 cursor-pointer"
+                      />
+                    ) : (
+                      <User className="w-6 h-6 text-white cursor-pointer hover:text-gray-300" />
+                    )}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-white text-black mt-2 w-40 shadow-lg rounded-md">
+                  <DropdownMenuItem asChild>
+                    <Link href="/user-profile" className="block px-4 py-2 hover:bg-gray-200">
+                      User Page
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => signOut()} className="block px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </li>
           </>
         ) : (
@@ -93,6 +106,7 @@ export default function Nav() {
     </SessionProvider>
   );
 }
+
 
 
 

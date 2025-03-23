@@ -31,12 +31,20 @@ export default function ProductFilter({
 }: ProductFilterProps) {
   const [selectBrand, setSelectBrand] = useState<string>("");
   const [selectCategory, setSelectCategory] = useState<string>("");
-  const [price, setPrice] = useState<number>(1000); // Default max price
+  const [price, setPrice] = useState<number>(10000000); // Mặc định 10 triệu VNĐ
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
     onFilter({ brand: selectBrand, category: selectCategory, price, search });
   }, [onFilter, selectBrand, selectCategory, price, search]);
+
+  // Hàm định dạng tiền Việt Nam
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
+  };
 
   return (
     <div className="flex flex-wrap gap-4 items-center justify-center my-4">
@@ -50,7 +58,9 @@ export default function ProductFilter({
       />
 
       {/* Brand Filter */}
-      <Select onValueChange={(value) => setSelectBrand(value === "All" ? "" : value)}>
+      <Select
+        onValueChange={(value) => setSelectBrand(value === "All" ? "" : value)}
+      >
         <SelectTrigger className="w-40">
           <SelectValue placeholder="Select Brand" />
         </SelectTrigger>
@@ -65,15 +75,19 @@ export default function ProductFilter({
       </Select>
 
       {/* Category Filter */}
-      <Select onValueChange={(value) => setSelectCategory(value === "All" ? "" : value)}>
+      <Select
+        onValueChange={(value) =>
+          setSelectCategory(value === "All" ? "" : value)
+        }
+      >
         <SelectTrigger className="w-40">
           <SelectValue placeholder="Select Category" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="All">All</SelectItem>
-          {categories.map((cat, idx) => (
-            <SelectItem key={idx} value={cat?.name}>
-              {cat ? cat.toUpperCase() : "Unknown Category"}
+          {categories.map((cat) => (
+            <SelectItem key={cat.id} value={cat.id}>
+              {cat.name}
             </SelectItem>
           ))}
         </SelectContent>
@@ -81,17 +95,18 @@ export default function ProductFilter({
 
       {/* Price Slider */}
       <div className="flex flex-col items-center">
-        <span className="text-sm font-medium">Max Price: ${price}</span>
+        <span className="text-sm font-medium">
+          Giá tối đa: {price.toLocaleString("vi-VN")}₫
+        </span>
         <Slider
           value={[price]}
           onValueChange={(val) => setPrice(val[0])}
           min={0}
-          max={5000}
-          step={50}
+          max={100000000}
+          step={50000}
           className="w-40"
         />
       </div>
     </div>
   );
 }
-

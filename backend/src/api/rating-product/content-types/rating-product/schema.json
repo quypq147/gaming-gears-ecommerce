@@ -4,7 +4,8 @@
   "info": {
     "singularName": "rating-product",
     "pluralName": "rating-products",
-    "displayName": "RatingProduct"
+    "displayName": "RatingProduct",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -23,6 +24,12 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::product.product",
+      "inversedBy": "rating_products"
+    },
+    "users_permissions_users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
       "inversedBy": "rating_products"
     }
   }

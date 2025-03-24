@@ -1,100 +1,111 @@
 "use client";
 
-import { useState, useEffect , use } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Toaster, toast } from "react-hot-toast";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Heart, ShoppingCart, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useRouter, useSearchParams } from "next/navigation"; // Cập nhật để lấy search params
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import placeholderImg from "@/assets/placeholder.png";
 
 export default function ProductClient({ product }: { product: any }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [cart, setCart] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(5);
+  const [user, setUser] = useState<any>(null);
 
   const imageUrl =
-    product.image?.length > 0
+    product?.image && product?.image.length > 0
       ? `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${product.image[0].url}`
       : placeholderImg;
 
   useEffect(() => {
-    try {
-      if (typeof window !== "undefined") {
-        setWishlist(JSON.parse(localStorage.getItem("wishlist") || "[]"));
-        setCart(JSON.parse(localStorage.getItem("cart") || "[]"));
-      }
-    } catch (error) {
-      console.error("Error loading data from localStorage", error);
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch(`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/users/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => setUser(data))
+        .catch(() => setUser(null));
     }
   }, []);
 
-  /** ✅ Toggle Wishlist */
-  const toggleWishlist = () => {
-    let updatedWishlist;
-    if (wishlist.includes(product.slug)) {
-      updatedWishlist = wishlist.filter((id) => id !== product.slug);
-      toast.success("Removed from Wishlist");
-    } else {
-      updatedWishlist = [...wishlist, product.slug];
-      toast.success("Added to Wishlist ❤️");
+  useEffect(() => {
+    async function fetchReviews() {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/reviews?filters[product][id][$eq]=${product.id}&populate=user`
+        );
+        const data = await res.json();
+        setReviews(data.data);
+      } catch (error) {
+        console.error("Failed to fetch reviews", error);
+      }
     }
+    fetchReviews();
+  }, [product.id]);
 
-    setWishlist(updatedWishlist);
-    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+  const handleLoginRedirect = () => {
+    router.push(`/sign-in?redirect=/product/${product.slug}`);
   };
 
-  /** ✅ Add to Cart */
-  const addToCart = () => {
-    const existingProduct = cart.find((item) => item.slug === product.slug);
-    let updatedCart;
-
-    if (existingProduct) {
-      updatedCart = cart.map((item) =>
-        item.slug === product.slug ? { ...item, quantity: item.quantity + 1 } : item
-      );
-      toast.success("Quantity Updated 🛒");
-    } else {
-      updatedCart = [...cart, { ...product, quantity: 1 }];
-      toast.success("Added to Cart 🛍️");
+  const submitReview = async () => {
+    if (!user) {
+      toast.error("Bạn cần đăng nhập để bình luận.");
+      return;
     }
 
-    setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-  };
+    if (!comment.trim()) {
+      toast.error("Vui lòng nhập nội dung bình luận.");
+      return;
+    }
 
-  /** ✅ Render Product Specifications */
-  const renderSpecifications = () => {
-    const specTypes: Record<string, string[]> = {
-      cpu_spec: ["cores", "threads", "socket", "cache", "base_clock"],
-      vga_spec: ["memory", "clock_speed", "cuda_cores", "interface"],
-      keyboard_spec: ["switch_type", "backlight", "connectivity"],
-      mouse_spec: ["dpi", "sensor", "weight"],
-      headphone_spec: ["driver_size", "frequency_range", "noise_cancellation"],
-    };
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại.");
+      setUser(null);
+      return;
+    }
 
-    return Object.keys(specTypes).map((specKey) => {
-      const specData = product[specKey];
-      if (!specData) return null;
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/reviews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          data: {
+            review: comment,
+            rating: rating,
+            product: product.id,
+            user: user.id,
+          },
+        }),
+      });
 
-      return (
-        <div key={specKey} className="mt-4 bg-gray-100 p-4 rounded-lg shadow-sm">
-          <h3 className="text-lg font-bold capitalize text-gray-900">
-            {specKey.replace("_", " ")}:
-          </h3>
-          <ul className="grid grid-cols-2 gap-2 mt-2 text-gray-700">
-            {specTypes[specKey].map((key) =>
-              specData[key] ? (
-                <li key={key} className="flex justify-between">
-                  <span className="font-medium capitalize">{key.replace("_", " ")}:</span>
-                  <span className="text-gray-900">{String(specData[key])}</span>
-                </li>
-              ) : null
-            )}
-          </ul>
-        </div>
-      );
-    });
+      if (res.ok) {
+        toast.success("Bình luận đã được gửi!");
+        setComment("");
+        setRating(5);
+        const newReview = await res.json();
+        setReviews([...reviews, newReview.data]);
+      } else {
+        toast.error("Lỗi khi gửi bình luận.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi gửi bình luận", error);
+      toast.error("Đã xảy ra lỗi.");
+    }
   };
 
   return (
@@ -103,7 +114,6 @@ export default function ProductClient({ product }: { product: any }) {
       <Toaster position="top-right" />
       <main className="container min-h-screen p-6">
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* ✅ Product Image */}
           <div className="relative w-full">
             <Image
               src={imageUrl}
@@ -113,33 +123,50 @@ export default function ProductClient({ product }: { product: any }) {
               className="rounded-lg object-cover shadow-md"
               priority
             />
-            <button
-              onClick={toggleWishlist}
-              aria-label="Toggle Wishlist"
-              className={`absolute top-4 right-4 p-2 rounded-full transition-all bg-white shadow-md ${
-                wishlist.includes(product.slug) ? "text-red-500" : "text-gray-500"
-              }`}
-            >
-              <Heart size={24} />
-            </button>
           </div>
 
-          {/* ✅ Product Details */}
           <div className="flex flex-col">
             <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
-            <p className="text-gray-600 font-medium text-lg capitalize mt-2">
-              {product.brand?.brand_name?.toUpperCase() || "Unknown Brand"}
-            </p>
-
+            <p className="text-lg font-bold text-gray-800 mt-4">{product.price} VND</p>
+            <p className="text-gray-700 mt-2">{product.description}</p>
+            
             <div className="mt-4 flex gap-4">
-              <Button onClick={addToCart} className="flex items-center gap-2">
+              <Button onClick={() => toast.success("Thêm vào giỏ hàng 🛒")} className="flex items-center gap-2">
                 <ShoppingCart size={20} />
-                Add To Cart
+                Thêm vào giỏ hàng
               </Button>
             </div>
+            
+            <div className="mt-6 bg-gray-100 p-4 rounded-lg shadow-sm">
+              <h3 className="text-lg font-bold text-gray-900">Đánh giá của khách hàng</h3>
 
-            {/* ✅ Product Specifications */}
-            <div className="mt-6">{renderSpecifications()}</div>
+              {reviews?.length > 0 ? (
+                reviews.map((review) => (
+                  <div key={review.id} className="mt-3 p-3 bg-white shadow rounded-lg">
+                    <p className="text-gray-900 font-bold">{review.attributes.user?.username || "Ẩn danh"}</p>
+                    <div className="flex items-center gap-1 text-yellow-500">
+                      {Array.from({ length: review.attributes.rating }).map((_, i) => (
+                        <Star key={i} size={16} />
+                      ))}
+                    </div>
+                    <p className="text-gray-700">{review.attributes.review}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-600">Chưa có bình luận nào.</p>
+              )}
+              
+              <div className="mt-4">
+                {user ? (
+                  <>
+                    <textarea value={comment} onChange={(e) => setComment(e.target.value)} className="w-full p-2 border rounded" placeholder="Viết đánh giá..." />
+                    <Button onClick={submitReview} className="mt-2">Gửi bình luận</Button>
+                  </>
+                ) : (
+                  <Button onClick={handleLoginRedirect} className="mt-2 w-full bg-blue-500 hover:bg-blue-600">Đăng nhập để bình luận</Button>
+                )}
+              </div>
+            </div>
           </div>
         </section>
       </main>
@@ -147,6 +174,8 @@ export default function ProductClient({ product }: { product: any }) {
     </>
   );
 }
+
+
 
 
 

@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const authOptions = {
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -24,7 +24,7 @@ const authOptions = {
           console.log("🔹 Strapi Response:", data);
 
           if (!res.ok) {
-            throw new Error(`Lỗi đăng nhập: ${data.error?.message || "Không rõ nguyên nhân"}`);
+            throw new Error(data.error?.message || "Đăng nhập thất bại");
           }
 
           if (!data.jwt) {
@@ -32,10 +32,10 @@ const authOptions = {
           }
 
           return {
-            id: data.user.id.toString(), // NextAuth yêu cầu id là string
+            id: data.user.id.toString(),
             name: data.user.username,
             email: data.user.email,
-            jwt: data.jwt, // Lưu token để sử dụng sau
+            jwt: data.jwt, // Lưu token
           };
         } catch (error) {
           console.error("Lỗi đăng nhập:", error);
@@ -50,7 +50,7 @@ const authOptions = {
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
-        token.jwt = user.jwt; // Lưu token vào JWT
+        token.jwt = user.jwt; // Lưu token
       }
       return token;
     },
@@ -68,8 +68,11 @@ const authOptions = {
     signIn: "/sign-in",
     error: "/sign-in?error=true",
   },
+  secret: process.env.NEXTAUTH_SECRET,
 };
+
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
+
 

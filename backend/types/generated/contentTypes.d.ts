@@ -789,6 +789,7 @@ export interface ApiRatingProductRatingProduct
   extends Struct.CollectionTypeSchema {
   collectionName: 'rating_products';
   info: {
+    description: '';
     displayName: 'RatingProduct';
     pluralName: 'rating-products';
     singularName: 'rating-product';
@@ -821,6 +822,10 @@ export interface ApiRatingProductRatingProduct
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    users_permissions_users: Schema.Attribute.Relation<
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -1406,6 +1411,10 @@ export interface PluginUsersPermissionsUser
       }>;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    rating_products: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::rating-product.rating-product'
+    >;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
     role: Schema.Attribute.Relation<
       'manyToOne',

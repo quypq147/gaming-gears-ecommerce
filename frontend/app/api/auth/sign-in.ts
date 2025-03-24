@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       return new Response(JSON.stringify({ error: "Sai tài khoản hoặc mật khẩu" }), { status: 400 });
     }
   
-    // Lưu Token và Role vào localStorage
+    
     if (typeof window !== "undefined") {
       localStorage.setItem("jwt", data.jwt);
       localStorage.setItem("role", data.user.role.name);

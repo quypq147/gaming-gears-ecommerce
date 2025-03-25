@@ -7,7 +7,7 @@ interface Product {
   brand: { brand_name: string };
   price: number;
   image: { url: string }[];
-  quantity?: number; // ✅ Add quantity property
+  quantity?: number; 
 }
 
 interface WishlistCartState {
@@ -17,7 +17,7 @@ interface WishlistCartState {
   removeFromWishlist: (id: string) => void;
   addToCart: (product: Product) => void;
   removeFromCart: (id: string) => void;
-  updateCartQuantity: (id: string, quantity: number) => void; // ✅ Add update function
+  updateCartQuantity: (id: string, quantity: number) => void; 
 }
 
 export const useWishlistCartStore = create<WishlistCartState>((set, get) => ({

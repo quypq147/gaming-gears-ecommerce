@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import DefaultAva from "@/assets/defaultAva.png";
 import Header from "@/components/header";
 import Image from "next/image";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function UserProfile({
   params,
@@ -37,7 +38,7 @@ export default async function UserProfile({
       <>
         <Header />
         <div className="flex justify-center items-center min-h-screen bg-gray-900">
-          <Card className="w-full max-w-md p-6 bg-gray-800 text-white shadow-lg rounded-xl">
+          <Card className="w-full max-w-2xl p-6 bg-gray-800 text-white shadow-lg rounded-xl">
             <CardHeader className="flex flex-col items-center">
               <Image
                 src={user.avatar || DefaultAva}
@@ -52,24 +53,40 @@ export default async function UserProfile({
             </CardHeader>
 
             <CardContent className="text-gray-300">
-              <p className="mb-2">
-                <strong>Email:</strong> {user.email}
-              </p>
-              <p className="mb-2">
-                <strong>Created At:</strong>{" "}
-                {new Date(user.createdAt).toLocaleDateString()}
-              </p>
-              <p className="mb-2">
-                <strong>Role:</strong> {user.role || "User"}
-              </p>
+              <Tabs defaultValue="profile">
+                <TabsList className="flex justify-center mb-4">
+                  <TabsTrigger value="profile">Thông tin người dùng</TabsTrigger>
+                  <TabsTrigger value="orders">Lịch sử đơn hàng</TabsTrigger>
+                </TabsList>
 
-              {isCurrentUser && (
-                <div className="mt-4">
-                  <Button variant="outline" className="w-full">
-                    Edit Profile
-                  </Button>
-                </div>
-              )}
+                <TabsContent value="profile">
+                  <p className="mb-2">
+                    <strong>Email:</strong> {user.email}
+                  </p>
+                  <p className="mb-2">
+                    <strong>Tạo vào ngày:</strong>{" "}
+                    {new Date(user.createdAt).toLocaleDateString()}
+                  </p>
+                  <p className="mb-2">
+                    <strong>Vai trò:</strong> {user.role || "User"}
+                  </p>
+
+                  {isCurrentUser && (
+                    <div className="mt-4">
+                      <Button variant="outline" className="w-full">
+                        Chỉnh thông tin người dùng
+                      </Button>
+                    </div>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="orders">
+                  <p className="mb-2">
+                    <strong>Lịch sử đơn hàng:</strong>
+                  </p>
+                  {/* Thêm mã để hiển thị lịch sử đơn hàng của người dùng */}
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </div>
@@ -77,6 +94,6 @@ export default async function UserProfile({
     );
   } catch (error) {
     console.error("Error fetching user:", error);
-    return <p className="text-red-500 text-center">Error loading user data.</p>;
+    return <p className="text-red-500 text-center">Lỗi khi load dữ liệu người dùng.</p>;
   }
 }

@@ -16,6 +16,7 @@ import { Heart, ShoppingCart } from "lucide-react";
 import { useWishlistCartStore } from "@/app/store/useWishlistCartStore";
 import { toast } from "react-hot-toast";
 import { useMemo } from "react";
+import { motion } from "framer-motion";
 
 interface ProductCardProps {
   product: {
@@ -51,90 +52,96 @@ export default function ProductCard({ product }: ProductCardProps) {
   const toggleWishlist = () => {
     if (isWishlisted) {
       removeFromWishlist(product.id);
-      toast("Removed from Wishlist", { icon: "❌" });
+      toast("Đã gỡ bỏ khỏi Wishlist", { icon: "❌" });
     } else {
       addToWishlist(product);
-      toast.success("Added to Wishlist");
+      toast.success("Đã thêm vào Wishlist");
     }
   };
 
   const handleAddToCart = () => {
     addToCart(product);
-    toast.success("Added to Cart");
+    toast.success("Đã thêm vào giỏ hàng");
   };
 
   return (
-    <Card key={product.id} className="w-full relative">
-      <CardHeader className="flex justify-between items-center">
-        <div>
-          <CardTitle className="text-lg font-semibold text-black">
-            {product.name}
-          </CardTitle>
-          <p className="text-gray-600 font-bold">
-            {product.brand.brand_name.toUpperCase()}
-          </p>
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="w-full"
+    >
+      <Card key={product.id} className="w-full relative">
+        <CardHeader className="flex justify-between items-center">
+          <div>
+            <CardTitle className="text-lg font-semibold text-black">
+              {product.name}
+            </CardTitle>
+            <p className="text-gray-600 font-bold">
+              {product.brand.brand_name.toUpperCase()}
+            </p>
+          </div>
+
+          {/* Wishlist Button */}
+          <button onClick={toggleWishlist} className="text-red-500">
+            <Heart fill={isWishlisted ? "red" : "none"} className="w-6 h-6" />
+          </button>
+        </CardHeader>
+
+        {/* Image Section */}
+        <div className="relative">
+          <Image
+            src={imageUrl}
+            alt={product.name}
+            width={300}
+            height={200}
+            className="w-full h-48 object-cover rounded"
+            priority
+          />
+          {hasDiscount && (
+            <Badge variant="destructive" className="absolute top-2 left-2">
+              -{discountPercent}%
+            </Badge>
+          )}
         </div>
 
-        {/* Wishlist Button */}
-        <button onClick={toggleWishlist} className="text-red-500">
-          <Heart fill={isWishlisted ? "red" : "none"} className="w-6 h-6" />
-        </button>
-      </CardHeader>
-
-      {/* Image Section */}
-      <div className="relative">
-        <Image
-          src={imageUrl}
-          alt={product.name}
-          width={300}
-          height={200}
-          className="w-full h-48 object-cover rounded"
-          priority
-        />
-        {hasDiscount && (
-          <Badge variant="destructive" className="absolute top-2 left-2">
-            -{discountPercent}%
-          </Badge>
-        )}
-      </div>
-
-      <CardContent>
-        <div className="flex items-center gap-2">
-          {hasDiscount ? (
-            <>
-              <p className="text-gray-500 line-through text-sm">
+        <CardContent>
+          <div className="flex items-center gap-2">
+            {hasDiscount ? (
+              <>
+                <p className="text-gray-500 line-through text-sm">
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(product.price)}
+                </p>
+                <p className="text-xl font-bold text-red-500">
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(finalPrice)}
+                </p>
+              </>
+            ) : (
+              <p className="text-xl font-bold text-black">
                 {new Intl.NumberFormat("vi-VN", {
                   style: "currency",
                   currency: "VND",
                 }).format(product.price)}
               </p>
-              <p className="text-xl font-bold text-red-500">
-                {new Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(finalPrice)}
-              </p>
-            </>
-          ) : (
-            <p className="text-xl font-bold text-black">
-              {new Intl.NumberFormat("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              }).format(product.price)}
-            </p>
-          )}
-        </div>
-      </CardContent>
+            )}
+          </div>
+        </CardContent>
 
-      <CardFooter className="flex justify-between">
-        <Link href={`/product/${product.slug}`}>
-          <Button variant="outline">View Details</Button>
-        </Link>
-        <Button onClick={handleAddToCart} variant="default">
-          <ShoppingCart className="w-5 h-5 mr-2" /> Add to Cart
-        </Button>
-      </CardFooter>
-    </Card>
+        <CardFooter className="flex justify-between">
+          <Link href={`/product/${product.slug}`}>
+            <Button variant="outline">Xem chi tiết</Button>
+          </Link>
+          <Button onClick={handleAddToCart} variant="default">
+            <ShoppingCart className="w-5 h-5 mr-2" /> Thêm vào giỏ
+          </Button>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 }
 

@@ -702,9 +702,11 @@ export interface ApiOrdersCollectionOrdersCollection
     paymentMethod: Schema.Attribute.Enumeration<
       ['cod', 'credit_card', 'paypal']
     >;
+    phone_number: Schema.Attribute.String;
     products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
-    state: Schema.Attribute.Enumeration<['pending', 'completed', 'cancelled']>;
+    state: Schema.Attribute.Enumeration<['pending', 'completed', 'cancelled']> &
+      Schema.Attribute.DefaultTo<'pending'>;
     totalAmount: Schema.Attribute.Decimal;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1409,6 +1411,7 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    phone_number: Schema.Attribute.String;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     rating_products: Schema.Attribute.Relation<

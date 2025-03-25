@@ -7,6 +7,7 @@ import { ShoppingCart, Heart, Menu, X, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { SessionProvider } from "next-auth/react";
+import { useUserStore } from "@/app/store/userStore";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 
@@ -34,7 +35,7 @@ function NavContent() {
         <li>
           <Link href="/shop">
             <b className="text-white cursor-pointer hover:text-gray-300">
-              Shop
+              Cửa hàng
             </b>
           </Link>
         </li>
@@ -59,8 +60,9 @@ function NavContent() {
             <li>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center">
+                  <Button className="flex items-center ">
                     {session?.user?.image ? (
+                      <>
                       <Image
                         src={session.user.image}
                         alt="User Avatar"
@@ -68,19 +70,24 @@ function NavContent() {
                         height={32}
                         className="w-8 h-8 rounded-full border border-gray-500 cursor-pointer"
                       />
+                      <p className="text-white">Xin chào {session?.user?.name} !</p>
+                      </>
                     ) : (
-                      <User className="w-6 h-6 text-white cursor-pointer hover:text-gray-300" />
+                      <>
+                        <User className="w-6 h-6 text-white cursor-pointer hover:text-gray-300" />
+                        <p className="text-white">Xin chào {session?.user?.name}</p>
+                      </>
                     )}
-                  </button>
+                  </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white text-black mt-2 w-40 shadow-lg rounded-md">
                   <DropdownMenuItem asChild>
-                    <Link href="/user-profile" className="block px-4 py-2 hover:bg-gray-200">
-                      User Page
+                    <Link href={`/user/${session.user.id}`} className="block px-4 py-2 hover:bg-gray-200">
+                      Trang Người Dùng
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => signOut()} className="block px-4 py-2 hover:bg-gray-200 cursor-pointer">
-                    Sign Out
+                    Đăng Xuất
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -90,7 +97,7 @@ function NavContent() {
           // Nút Đăng Nhập
           <li>
             <Link href="/sign-in">
-              <Button className="text-white cursor-pointer">Sign In</Button>
+              <Button className="text-white cursor-pointer">Đăng Nhập</Button>
             </Link>
           </li>
         )}

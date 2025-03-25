@@ -11,7 +11,7 @@ export default function Loading() {
         <Loader2 className="h-10 w-10 text-primary animate-spin" />
 
         {/* Loading Text */}
-        <p className="text-gray-700 text-lg font-medium">Loading, please wait...</p>
+        <p className="text-gray-700 text-lg font-medium">Vui lòng chờ một chút</p>
 
         {/* Skeleton UI for Product Preview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import placeholderImg from "@/assets/placeholder.png";
 
 interface Product {
   id: string;
@@ -11,14 +12,16 @@ interface Product {
 }
 
 const ProductDetails = ({ product }: { product: Product }) => {
-  if (!product) return <p>Product not found.</p>;
+  const imageUrl =
+    product.image?.length > 0 ? `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${product.image[0].url}` : placeholderImg;
+  if (!product) return <p>Sản phẩm không tìm thấy.</p>;
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">{product.name}</h1>
       <p className="text-gray-600">{product.brand.brand_name}</p>
       <Image
-        src={product.image?.[0]?.url || "/placeholder.png"}
+        src={imageUrl}
         alt={product.name}
         width={400}
         height={300}

@@ -42,11 +42,11 @@ const HomePage = async () => {
             Gamesome
           </h1>
           <p className="text-white text-lg md:text-xl">
-            Upgrade your gaming experience!
+            Nâng cấp trải nghiệm gaming của bạn!
           </p>
           <Link href="/shop">
             <Button className="w-full md:w-1/4 z-10 cursor-pointer">
-              Shop Now Here!
+              Mua ngay đây!
             </Button>
           </Link>
         </div>
@@ -55,7 +55,7 @@ const HomePage = async () => {
       {/* Popular Brands Section */}
       <section className="bg-gray-100 p-4 md:p-6 rounded-lg relative bottom-5 text-center w-11/12 md:w-5/6 mx-auto">
         <h2 className="text-xl font-semibold mb-4 text-black">
-          Popular Brands
+          Các hãng nổi tiếng
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 justify-center items-center">
           {brands.slice(0, 6).map((brand: any) => (
@@ -74,7 +74,7 @@ const HomePage = async () => {
       {/* Top Products Section */}
       <section className="p-4 md:p-5">
         <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black">
-          Top Product
+          Sản phẩm trending
         </h2>
         <ProductList
           products={products.filter((p: any) => p.trending).slice(0, 4)}
@@ -84,7 +84,7 @@ const HomePage = async () => {
       {/* Featured Products with Tabs */}
       <section className="featured-product bg-gray-100 p-4 md:p-6">
         <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black">
-          If you like
+          Nếu bạn muốn
         </h2>
         <Tabs defaultValue="All">
           <TabsList className="gap-4 md:gap-10 flex flex-wrap justify-center md:justify-between">
@@ -107,7 +107,7 @@ const HomePage = async () => {
         <div className="flex justify-center p-6">
           <Link href="/shop">
             <Button className="w-full md:w-auto cursor-pointer">
-              View More
+              Xem tất cả sản phẩm
             </Button>
           </Link>
         </div>

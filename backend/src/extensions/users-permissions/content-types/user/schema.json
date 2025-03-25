@@ -90,6 +90,9 @@
       "relation": "manyToMany",
       "target": "api::rating-product.rating-product",
       "mappedBy": "users_permissions_users"
+    },
+    "phone_number": {
+      "type": "string"
     }
   }
 }

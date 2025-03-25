@@ -54,7 +54,11 @@
         "pending",
         "completed",
         "cancelled"
-      ]
+      ],
+      "default": "pending"
+    },
+    "phone_number": {
+      "type": "string"
     }
   }
 }

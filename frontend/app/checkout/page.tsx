@@ -5,23 +5,26 @@ import Header from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function CheckoutPage() {
   const { cart, clearCart } = useWishlistCartStore();
   const router = useRouter();
 
-  // Checkout Form State
+  // Trạng thái của form thanh toán
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [phonenumber, setPhonenumber] = useState("");
+  const [email, setEmail] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Calculate totals
+  // Tính toán tổng tiền
   const subtotal = cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
   const salesTax = Math.round(subtotal * 0.1);
   const grandTotal = subtotal + salesTax;
 
-  // Generate Order Code
+  // Tạo mã đơn hàng
   const generateOrderCode = () => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let code = "";
@@ -31,10 +34,10 @@ export default function CheckoutPage() {
     return code;
   };
 
-  // Handle Order Submission
+  // Xử lý gửi đơn hàng
   const handleOrderSubmit = async () => {
     if (!name || !address) {
-      alert("Please fill in all required fields!");
+      alert("Vui lòng điền đầy đủ thông tin!");
       return;
     }
 
@@ -44,6 +47,8 @@ export default function CheckoutPage() {
       orderCode: generateOrderCode(),
       customerName: name,
       address,
+      phonenumber,
+      email,
       paymentMethod,
       totalAmount: grandTotal,
       products: cart.map((product) => ({
@@ -54,7 +59,7 @@ export default function CheckoutPage() {
     };
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/orders`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/orders-collections`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,13 +67,13 @@ export default function CheckoutPage() {
         body: JSON.stringify({ data: orderData }),
       });
 
-      if (!res.ok) throw new Error("Failed to place order");
+      if (!res.ok) throw new Error("Đặt hàng thất bại");
 
-      alert("Order placed successfully!");
+      alert("Đặt hàng thành công!");
       clearCart();
       router.push("/order-success");
     } catch (error) {
-      alert("Error placing order. Please try again.");
+      alert("Lỗi khi đặt hàng. Vui lòng thử lại.");
     } finally {
       setIsSubmitting(false);
     }
@@ -78,14 +83,26 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-gray-100">
       <Header />
       <div className="container mx-auto p-6">
-        <h1 className="text-3xl font-bold text-center mb-8">Checkout</h1>
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-3xl font-bold text-center mb-8"
+        >
+          Thanh Toán
+        </motion.h1>
 
         <div className="grid lg:grid-cols-2 gap-6">
-          {/* Order Summary Section */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-4">Mini Cart Total</h2>
+          {/* Phần tóm tắt đơn hàng */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white p-6 rounded-lg shadow-md"
+          >
+            <h2 className="text-xl font-bold mb-4">Tổng Giỏ Hàng</h2>
 
-            {/* Cart Total Breakdown */}
+            {/* Chi tiết giỏ hàng */}
             <div className="space-y-2 border-b pb-4">
               {cart.map((product) => (
                 <div key={product.id} className="flex justify-between">
@@ -99,67 +116,92 @@ export default function CheckoutPage() {
               ))}
             </div>
 
-            {/* Totals */}
+            {/* Tổng tiền */}
             <div className="space-y-2 mt-4">
               <div className="flex justify-between">
-                <span>Subtotal:</span>
+                <span>Tổng phụ:</span>
                 <span>{subtotal.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}</span>
               </div>
               <div className="flex justify-between">
-                <span>Sales Tax:</span>
+                <span>Thuế:</span>
                 <span>{salesTax.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}</span>
               </div>
               <div className="flex justify-between">
-                <span className="font-bold text-lg">Grand Total:</span>
+                <span className="font-bold text-lg">Tổng cộng:</span>
                 <span className="font-bold text-lg">{grandTotal.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Checkout Form */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-4">Billing & Shipping Info</h2>
+          {/* Form thanh toán */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white p-6 rounded-lg shadow-md"
+          >
+            <h2 className="text-xl font-bold mb-4">Thông Tin Thanh Toán & Giao Hàng</h2>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Full Name</label>
+              <label className="block text-sm font-medium text-gray-700">Họ và tên</label>
               <input
                 type="text"
                 className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                placeholder="Enter your full name"
+                placeholder="Nhập họ và tên của bạn"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Shipping Address</label>
+              <label className="block text-sm font-medium text-gray-700">Số điện thoại</label>
               <input
                 type="text"
                 className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                placeholder="Enter your address"
+                placeholder="Nhập Số điện thoại của bạn"
+                value={phonenumber}
+                onChange={(e) => setPhonenumber(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <input
+                type="email"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none"
+                placeholder="Nhập email của bạn"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">Địa chỉ giao hàng</label>
+              <input
+                type="text"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none"
+                placeholder="Nhập địa chỉ của bạn"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Payment Method</label>
+              <label className="block text-sm font-medium text-gray-700">Phương thức thanh toán</label>
               <select
                 className="w-full px-4 py-2 border rounded-md"
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
               >
-                <option value="cod">Cash on Delivery (COD)</option>
-                <option value="credit_card">Credit Card</option>
+                <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                <option value="credit_card">Thẻ tín dụng</option>
                 <option value="paypal">PayPal</option>
                 <option value="momo">MoMo</option>
               </select>
             </div>
 
-            {/* Checkout Button */}
+            {/* Nút đặt hàng */}
             <Button className="w-full" onClick={handleOrderSubmit} disabled={isSubmitting}>
-              {isSubmitting ? "Processing..." : "Place Order"}
+              {isSubmitting ? "Đang xử lý..." : "Đặt hàng"}
             </Button>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

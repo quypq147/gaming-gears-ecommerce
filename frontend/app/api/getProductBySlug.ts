@@ -1,5 +1,7 @@
 "use server";
 
+import { TemplateString } from "next/dist/lib/metadata/types/metadata-types";
+
 interface TextChild {
   type: string;
   text: string;
@@ -13,6 +15,8 @@ interface DescriptionBlock {
 }
 
 export interface ProductData {
+  image: any;
+  name: string | TemplateString | undefined;
   id: string;
   attributes: {
     name: string;

@@ -19,7 +19,7 @@ import Footer from "@/components/footer";
 import placeholderImg from "@/assets/placeholder.png";
 import { useWishlistCart } from "@/context/WishlistCartContext";
 import { motion } from "framer-motion";
-import { useUserStore } from "@/app/store/userStore";
+import { useUserStore } from "@/store/userStore";
 
 
 export default function ProductClient({ product }: { product: any }) {

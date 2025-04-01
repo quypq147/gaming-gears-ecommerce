@@ -7,7 +7,7 @@ import { ShoppingCart, Heart, Menu, X, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { SessionProvider } from "next-auth/react";
-import { useUserStore } from "@/app/store/userStore";
+import { useUserStore } from "@/store/userStore";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 

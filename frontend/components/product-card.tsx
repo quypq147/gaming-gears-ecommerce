@@ -13,7 +13,7 @@ import { Button } from "./ui/button";
 import placeholderImg from "@/assets/placeholder.png";
 import Link from "next/link";
 import { Heart, ShoppingCart } from "lucide-react";
-import { useWishlistCartStore } from "@/app/store/useWishlistCartStore";
+import { useWishlistCartStore } from "@/store/useWishlistCartStore";
 import { toast } from "react-hot-toast";
 import { useMemo } from "react";
 import { motion } from "framer-motion";

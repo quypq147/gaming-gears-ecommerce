@@ -11,8 +11,8 @@ import { Loader2 } from "lucide-react";
 import { IoIosReturnLeft } from "react-icons/io";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import ReCAPTCHA from "react-google-recaptcha";
-import { useUserStore } from "@/app/store/userStore";
+import  ReCAPTCHA from "react-google-recaptcha";
+import { useUserStore } from "@/store/userStore";
 
 export default function SignInPage() {
   const router = useRouter();

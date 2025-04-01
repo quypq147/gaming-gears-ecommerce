@@ -869,7 +869,7 @@ export interface ApiVouncherVouncher extends Struct.CollectionTypeSchema {
   collectionName: 'vounchers';
   info: {
     description: '';
-    displayName: 'vouncher';
+    displayName: 'voucher';
     pluralName: 'vounchers';
     singularName: 'vouncher';
   };

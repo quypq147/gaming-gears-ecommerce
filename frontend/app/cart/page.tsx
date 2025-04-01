@@ -1,6 +1,6 @@
 "use client";
 
-import { useWishlistCartStore } from "@/app/store/useWishlistCartStore";
+import { useWishlistCartStore } from "@/store/useWishlistCartStore";
 import Header from "@/components/header";
 import ProductDetails from "@/components/product-details";
 import getVounchers from "../api/getVouncher";

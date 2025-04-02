@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "order"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "address": {
+      "type": "text",
+      "required": true
+    },
+    "customerName": {
+      "type": "string"
+    },
+    "paymentMethod": {
+      "type": "enumeration",
+      "enum": [
+        "cod",
+        "credit_card",
+        "paypal"
+      ]
+    },
+    "totalAmount": {
+      "type": "decimal"
+    },
+    "orderCode": {
+      "type": "string"
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "paid",
+        "shipped",
+        "completed",
+        "cancel"
+      ]
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "orders"
+    },
+    "orders_details": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::orders-detail.orders-detail",
+      "mappedBy": "order"
+    }
+  }
+}

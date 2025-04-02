@@ -85,14 +85,43 @@
     "address": {
       "type": "text"
     },
-    "rating_products": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::rating-product.rating-product",
-      "mappedBy": "users_permissions_users"
-    },
-    "phone_number": {
+    "phoneNumber": {
       "type": "string"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "users_permissions_user"
+    },
+    "carts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::cart.cart",
+      "mappedBy": "users_permissions_user"
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "username"
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "users_permissions_user"
+    },
+    "birthdate": {
+      "type": "date"
+    },
+    "gender": {
+      "type": "enumeration",
+      "enum": [
+        "male",
+        "female"
+      ]
     }
   }
 }

@@ -104,23 +104,29 @@
       "target": "api::key-board-spec.key-board-spec",
       "mappedBy": "product"
     },
-    "rating_products": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::rating-product.rating-product",
-      "mappedBy": "product"
-    },
-    "orders_collection": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::orders-collection.orders-collection",
-      "inversedBy": "products"
-    },
     "wishlists": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::wishlist.wishlist",
       "mappedBy": "products"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "product"
+    },
+    "carts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::cart.cart",
+      "mappedBy": "products"
+    },
+    "orders_details": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::orders-detail.orders-detail",
+      "mappedBy": "product"
     }
   }
 }

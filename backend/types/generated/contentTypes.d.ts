@@ -399,6 +399,37 @@ export interface ApiBrandBrand extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCartCart extends Struct.CollectionTypeSchema {
+  collectionName: 'carts';
+  info: {
+    description: '';
+    displayName: 'cart';
+    pluralName: 'carts';
+    singularName: 'cart';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::cart.cart'> &
+      Schema.Attribute.Private;
+    products: Schema.Attribute.Relation<'manyToMany', 'api::product.product'>;
+    publishedAt: Schema.Attribute.DateTime;
+    quanity: Schema.Attribute.Integer;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
 export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   collectionName: 'categories';
   info: {
@@ -635,79 +666,76 @@ export interface ApiMouseSpecMouseSpec extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiOrderHistoryOrderHistory
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'order_histories';
+export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
+  collectionName: 'orders';
   info: {
-    displayName: 'OrderHistory';
-    pluralName: 'order-histories';
-    singularName: 'order-history';
+    displayName: 'order';
+    pluralName: 'orders';
+    singularName: 'order';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::order-history.order-history'
-    > &
-      Schema.Attribute.Private;
-    order: Schema.Attribute.Relation<
-      'oneToOne',
-      'api::orders-collection.orders-collection'
-    >;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
-export interface ApiOrdersCollectionOrdersCollection
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'orders_collections';
-  info: {
-    description: '';
-    displayName: 'Orders';
-    pluralName: 'orders-collections';
-    singularName: 'orders-collection';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    address: Schema.Attribute.Text;
-    createAt: Schema.Attribute.DateTime;
+    address: Schema.Attribute.Text & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     customerName: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::orders-collection.orders-collection'
-    > &
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
       Schema.Attribute.Private;
-    order_history: Schema.Attribute.Relation<
-      'oneToOne',
-      'api::order-history.order-history'
+    orderCode: Schema.Attribute.String;
+    orders_details: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::orders-detail.orders-detail'
     >;
-    orderCode: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique;
     paymentMethod: Schema.Attribute.Enumeration<
       ['cod', 'credit_card', 'paypal']
     >;
     phone_number: Schema.Attribute.String;
-    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
-    state: Schema.Attribute.Enumeration<['pending', 'completed', 'cancelled']> &
-      Schema.Attribute.DefaultTo<'pending'>;
+    state: Schema.Attribute.Enumeration<
+      ['pending', 'paid', 'shipped', 'completed', 'cancel']
+    >;
     totalAmount: Schema.Attribute.Decimal;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiOrdersDetailOrdersDetail
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'orders_details';
+  info: {
+    description: '';
+    displayName: 'orders-detail';
+    pluralName: 'orders-details';
+    singularName: 'orders-detail';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::orders-detail.orders-detail'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Relation<'manyToOne', 'api::order.order'>;
+    price: Schema.Attribute.Decimal;
+    product: Schema.Attribute.Relation<'manyToOne', 'api::product.product'>;
+    publishedAt: Schema.Attribute.DateTime;
+    quantity: Schema.Attribute.Integer;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -727,6 +755,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   };
   attributes: {
     brand: Schema.Attribute.Relation<'manyToOne', 'api::brand.brand'>;
+    carts: Schema.Attribute.Relation<'manyToMany', 'api::cart.cart'>;
     category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
     cpu_spec: Schema.Attribute.Relation<'oneToOne', 'api::cpu-spec.cpu-spec'>;
     createdAt: Schema.Attribute.DateTime;
@@ -762,17 +791,14 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'api::mouse-spec.mouse-spec'
     >;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    orders_collection: Schema.Attribute.Relation<
-      'manyToOne',
-      'api::orders-collection.orders-collection'
+    orders_details: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::orders-detail.orders-detail'
     >;
     price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     quantity: Schema.Attribute.Integer;
-    rating_products: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::rating-product.rating-product'
-    >;
+    reviews: Schema.Attribute.Relation<'oneToMany', 'api::review.review'>;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     sold: Schema.Attribute.Integer;
     trending: Schema.Attribute.Boolean;
@@ -787,14 +813,13 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiRatingProductRatingProduct
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'rating_products';
+export interface ApiReviewReview extends Struct.CollectionTypeSchema {
+  collectionName: 'reviews';
   info: {
     description: '';
-    displayName: 'RatingProduct';
-    pluralName: 'rating-products';
-    singularName: 'rating-product';
+    displayName: 'review';
+    pluralName: 'reviews';
+    singularName: 'review';
   };
   options: {
     draftAndPublish: true;
@@ -806,26 +831,25 @@ export interface ApiRatingProductRatingProduct
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::rating-product.rating-product'
+      'api::review.review'
     > &
       Schema.Attribute.Private;
     product: Schema.Attribute.Relation<'manyToOne', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
-    Rating: Schema.Attribute.Integer &
-      Schema.Attribute.Required &
+    rating: Schema.Attribute.Integer &
       Schema.Attribute.SetMinMax<
         {
           max: 5;
-          min: 1;
+          min: 0;
         },
         number
       >;
-    Review: Schema.Attribute.Text;
+    review: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    users_permissions_users: Schema.Attribute.Relation<
-      'manyToMany',
+    users_permissions_user: Schema.Attribute.Relation<
+      'manyToOne',
       'plugin::users-permissions.user'
     >;
   };
@@ -901,7 +925,8 @@ export interface ApiVouncherVouncher extends Struct.CollectionTypeSchema {
 export interface ApiWishlistWishlist extends Struct.CollectionTypeSchema {
   collectionName: 'wishlists';
   info: {
-    displayName: 'Wishlist';
+    description: '';
+    displayName: 'wishlist';
     pluralName: 'wishlists';
     singularName: 'wishlist';
   };
@@ -1389,7 +1414,9 @@ export interface PluginUsersPermissionsUser
   attributes: {
     address: Schema.Attribute.Text;
     avatar: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    birthdate: Schema.Attribute.Date;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    carts: Schema.Attribute.Relation<'oneToMany', 'api::cart.cart'>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
@@ -1400,29 +1427,30 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    fullName: Schema.Attribute.String;
+    gender: Schema.Attribute.Enumeration<['male', 'female']>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
+    orders: Schema.Attribute.Relation<'oneToMany', 'api::order.order'>;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
-    phone_number: Schema.Attribute.String;
+    phoneNumber: Schema.Attribute.String;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
-    rating_products: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::rating-product.rating-product'
-    >;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
+    reviews: Schema.Attribute.Relation<'oneToMany', 'api::review.review'>;
     role: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    slug: Schema.Attribute.UID<'username'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1447,6 +1475,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::brand.brand': ApiBrandBrand;
+      'api::cart.cart': ApiCartCart;
       'api::category.category': ApiCategoryCategory;
       'api::cpu-spec.cpu-spec': ApiCpuSpecCpuSpec;
       'api::headphone-spec.headphone-spec': ApiHeadphoneSpecHeadphoneSpec;
@@ -1454,10 +1483,10 @@ declare module '@strapi/strapi' {
       'api::monitor-spec.monitor-spec': ApiMonitorSpecMonitorSpec;
       'api::mouse-pad-spec.mouse-pad-spec': ApiMousePadSpecMousePadSpec;
       'api::mouse-spec.mouse-spec': ApiMouseSpecMouseSpec;
-      'api::order-history.order-history': ApiOrderHistoryOrderHistory;
-      'api::orders-collection.orders-collection': ApiOrdersCollectionOrdersCollection;
+      'api::order.order': ApiOrderOrder;
+      'api::orders-detail.orders-detail': ApiOrdersDetailOrdersDetail;
       'api::product.product': ApiProductProduct;
-      'api::rating-product.rating-product': ApiRatingProductRatingProduct;
+      'api::review.review': ApiReviewReview;
       'api::vga-spec.vga-spec': ApiVgaSpecVgaSpec;
       'api::vouncher.vouncher': ApiVouncherVouncher;
       'api::wishlist.wishlist': ApiWishlistWishlist;

@@ -797,10 +797,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     >;
     price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    quantity: Schema.Attribute.Integer;
     reviews: Schema.Attribute.Relation<'oneToMany', 'api::review.review'>;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     sold: Schema.Attribute.Integer;
+    stock: Schema.Attribute.Integer;
     trending: Schema.Attribute.Boolean;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

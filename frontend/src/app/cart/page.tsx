@@ -80,7 +80,10 @@ export default function CartPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => updateCartQuantity(product.id, product.quantity + 1)}
+                        onClick={() => updateCartQuantity(product.id, product.quantity + 1)
+                          
+                        }
+                        disabled={product.quantity >= product.stock}
                       >
                         ➕
                       </Button>

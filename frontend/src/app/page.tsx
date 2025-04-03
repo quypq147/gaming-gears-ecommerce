@@ -16,8 +16,8 @@ export default async function HomePage() {
 
     const categories = [
       { name: "All", value: null },
-      { name: "CPU", value: "cpu" },
-      { name: "VGA", value: "vga" },
+      { name: "Cpu", value: "cpu" },
+      { name: "Vga", value: "vga" },
       { name: "Headphone", value: "headphone" },
       { name: "Mouse", value: "mouse" },
       { name: "Keyboard", value: "keyboard" },
@@ -95,7 +95,7 @@ export default async function HomePage() {
                   value={category.name}
                   className="text-sm md:text-base"
                 >
-                  {category.name.toUpperCase()}
+                  {category.name}
                 </TabsTrigger>
               ))}
             </TabsList>

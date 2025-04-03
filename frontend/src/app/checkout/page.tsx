@@ -65,7 +65,7 @@ export default function CheckoutPage() {
 
       alert("Đặt hàng thành công!");
       clearCart();
-      router.push("/order-success");
+      router.push("/checkout/order-success");
     } catch (error: any) {
       console.error("Error creating order:", error.message);
       alert("Lỗi khi đặt hàng. Vui lòng thử lại.");

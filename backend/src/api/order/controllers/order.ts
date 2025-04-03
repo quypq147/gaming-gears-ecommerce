@@ -53,6 +53,17 @@ export default factories.createCoreController(
             if (!productExists) {
               throw new Error(`Product with ID ${product.id} does not exist.`);
             }
+            if (productExists.stock < product.quantity) {
+              throw new Error(
+                `Product with ID ${product.id} does not have enough stock.`
+              );
+            }
+            await strapi.db.query("api::product.product").update({
+              where: { id: product.id },
+              data: {
+                stock: productExists.stock - product.quantity, // Giảm tồn kho
+              },
+            });
 
             // Tạo chi tiết đơn hàng
             return strapi.db.query("api::orders-detail.orders-detail").create({

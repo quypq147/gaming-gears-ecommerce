@@ -48,8 +48,9 @@ export default function OrderHistoryPage() {
   }
 
   return (
+    <>
+    <Header />
     <div className="container mx-auto p-6">
-        <Header />
       <Toaster position="top-right" />
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
@@ -115,5 +116,6 @@ export default function OrderHistoryPage() {
         ))}
       </div>
     </div>
+    </>
   );
 }

@@ -7,6 +7,7 @@ interface Product {
   brand: { brand_name: string };
   price: number;
   image: { url: string }[];
+  stock: number;
   quantity?: number;
 }
 
@@ -24,16 +25,27 @@ export const useCartStore = create<CartState>((set, get) => ({
   addToCart: (product) => {
     const { cart } = get();
     const existingProduct = cart.find((item) => item.id === product.id);
-
     if (existingProduct) {
+      // Kiểm tra nếu số lượng hiện tại + 1 vượt quá tồn kho
+      if (existingProduct.quantity + 1 > product.stock) {
+        alert("Sản phẩm đã hết hàng!");
+        return;
+      }
+
+      // Cập nhật số lượng sản phẩm trong giỏ hàng
       set({
         cart: cart.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: (item.quantity || 1) + 1 }
+            ? { ...item, quantity: item.quantity + 1 }
             : item
         ),
       });
     } else {
+      // Kiểm tra nếu sản phẩm còn tồn kho
+      if (product.stock <= 0) {
+        alert("Sản phẩm đã hết hàng!");
+        return;
+      }
       set({ cart: [...cart, { ...product, quantity: 1 }] });
     }
   },

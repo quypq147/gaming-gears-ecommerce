@@ -62,7 +62,7 @@ export default function SignUpPage() {
       toast.success("Tạo tài khoản thành công! Đang chuyển hướng...");
 
       setTimeout(() => {
-        router.push("/sign-in");
+        router.push("/auth/sign-in");
       }, 2000);
     } catch (err: any) {
       toast.error(err.message || "Đăng ký thất bại");

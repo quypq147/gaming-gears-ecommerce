@@ -37,7 +37,13 @@ Navigate to the backend directory and start the Docker containers:
 
 ```bash
 cd backend
-docker-compose up
+npm install
+```
+
+Then, run the development server:
+
+```bash
+npm run develop
 ```
 
 This will start the Strapi backend and the Nginx server.
@@ -49,7 +55,7 @@ Make sure to configure your environment variables. You can use the provided `.en
 ## Project Structure
 
 ### Frontend
-
+- `src/`: Container Project Folder
 - `app/`: Main application pages and components
 - `assets/`: Static assets like images and styles
 - `components/`: Reusable UI components

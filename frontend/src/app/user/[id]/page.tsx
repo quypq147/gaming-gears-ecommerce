@@ -10,6 +10,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export default function UserPage() {
   const user = useUserStore((state) => state.user);
+  console.log("User state" , user);
 
   const [fullName, setFullName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -25,7 +26,7 @@ export default function UserPage() {
         <aside className="w-1/4 bg-white shadow-md p-4">
           <div className="flex flex-col items-center">
             
-            <h2 className="mt-2 text-lg font-semibold">{user?.name || "User"}</h2>
+            <h2 className="mt-2 text-lg font-semibold">{user?.username || "User"}</h2>
             <p className="text-sm text-gray-500">{user?.email}</p>
           </div>
           <nav className="mt-6 space-y-2">
@@ -34,10 +35,7 @@ export default function UserPage() {
             </Link>
             <Link href={`/user/${user?.id}/orderHistory`} className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
               Đơn hàng
-            </Link>
-            <Link href={`/user/${user?.id}/address`} className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-              Địa chỉ giao hàng
-            </Link>
+            </Link> 
             <Link href={`/user/${user?.id}/changePassword`} className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
               Đổi mật khẩu
             </Link>
@@ -53,12 +51,12 @@ export default function UserPage() {
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Họ</label>
+                <label className="block text-sm font-medium text-gray-700">Họ và tên</label>
                 <Input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Nhập họ"
+                  placeholder="Nhập họ và tên"
                 />
               </div>
               <div>
@@ -104,12 +102,6 @@ export default function UserPage() {
                     <RadioGroupItem value="female" id="female" />
                     <label htmlFor="female" className="ml-2 text-sm text-gray-700">
                       Nữ
-                    </label>
-                  </div>
-                  <div className="flex items-center">
-                    <RadioGroupItem value="other" id="other" />
-                    <label htmlFor="other" className="ml-2 text-sm text-gray-700">
-                      Khác
                     </label>
                   </div>
                 </RadioGroup>

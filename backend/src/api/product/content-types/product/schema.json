@@ -40,7 +40,7 @@
       "target": "api::category.category",
       "inversedBy": "products"
     },
-    "quantity": {
+    "stock": {
       "type": "integer"
     },
     "description": {

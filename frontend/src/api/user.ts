@@ -18,6 +18,23 @@ export const fetchUserById = async (userId: string) => {
     throw new Error(error.response?.data?.message || "Failed to fetch user data");
   }
 };
+export const updateUser = async (userId : string , userData: any) => {
+  try {
+    const token = useUserStore.getState().token;
+    const headers: Record<string, string> = {};
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await axiosInstance.put(`/users/${userId}`, userData, { headers });
+    return response.data;
+  } catch (error: any) {
+    console.log("Data to update:", userData);
+    console.error("Error updating user:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "Failed to update user data");
+  }
+}
 export const signIn = async ( email: string, password: string) => {
   try {
     const response = await axiosInstance.post("/auth/local", {

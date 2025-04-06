@@ -1,3 +1,5 @@
+[English][README.md] [Vietname][README-VN.md]
+
 # E-commerce Project
 
 This is a full-stack e-commerce project with a backend powered by Strapi and a frontend built with Next.js.
@@ -10,7 +12,6 @@ Make sure you have the following installed on your machine:
 
 - Node.js
 - npm, yarn, pnpm, or bun (package managers)
-- Docker (for running the backend services)
 
 ### Running the Development Server
 

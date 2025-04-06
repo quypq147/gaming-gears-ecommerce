@@ -1,4 +1,4 @@
-[English][README.md] [Vietname][README-VN.md]
+[English][README.md] [Vietnamese][README-VN.md]
 
 # E-commerce Project
 

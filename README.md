@@ -34,7 +34,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 ### Running the Backend
 
-Navigate to the backend directory and start the Docker containers:
+Navigate to the backend directory:
 
 ```bash
 cd backend
@@ -51,7 +51,7 @@ This will start the Strapi backend and the Nginx server.
 
 ### Environment Variables
 
-Make sure to configure your environment variables. You can use the provided `.env.example` files in both the frontend and backend directories as a reference.
+Make sure to configure your environment variables. You can use the provided `.env.test` files in both the frontend and backend directories as a reference.
 
 ## Project Structure
 

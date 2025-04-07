@@ -1,4 +1,4 @@
-[English][README.md] [Vietname][README-VN.md]
+[English](https://github.com/quypq147/gaming-gears-ecommerce/blob/main/README.md) [Vietnamese](https://github.com/quypq147/gaming-gears-ecommerce/blob/main/README-VN.md)
 
 # Dự án E-commerce
 

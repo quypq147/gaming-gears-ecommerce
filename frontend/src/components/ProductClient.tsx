@@ -14,9 +14,7 @@ import { fetchReviews, submitReview } from "@/src/api/review";
 import placeholderImg from "@/src/assets/placeholder.png";
 import Header from "./header";
 
-
 export default function ProductClient({ product }: { product: any }) {
-
   const router = useRouter();
   const { addToCart } = useCartStore();
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlistStore();
@@ -26,11 +24,11 @@ export default function ProductClient({ product }: { product: any }) {
   const [loadingReviews, setLoadingReviews] = useState(true);
   const user = useUserStore((state) => state.user);
 
-  const imageUrl =
-    product?.image && product?.image.length > 0
-      ? `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${product.image[0].url}`
-      : placeholderImg;
-
+  const imageUrl = product?.image[0].url
+    ? `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${product.image[0].url}`
+    : placeholderImg;
+  console.log("Product Image URL:", product?.image.url);
+  console.log("Image URL:", imageUrl);
   // Lấy danh sách đánh giá
   useEffect(() => {
     const loadReviews = async () => {
@@ -66,7 +64,6 @@ export default function ProductClient({ product }: { product: any }) {
     }
   };
 
-  
   // Xử lý gửi bình luận
   const handleSubmitReview = async () => {
     if (!user) {
@@ -120,6 +117,99 @@ export default function ProductClient({ product }: { product: any }) {
               className="rounded-lg object-cover shadow-md"
               priority
             />
+            <h3 className="text-lg font-bold text-gray-900">
+              Thông số kỹ thuật
+            </h3>
+            <section className="mt-8">
+              {product.category?.[0]?.name === "CPU" && product.cpu_spec && (
+                <div className="mt-4">
+                  <h4 className="text-md font-semibold text-gray-800">CPU</h4>
+                  <ul className="mt-2 space-y-1">
+                    {Object.entries(product.cpu_spec).map(
+                      ([key, value], index) => (
+                        <li key={index} className="flex justify-between">
+                          <span className="font-medium text-gray-700">
+                            {key}:
+                          </span>
+                          <span className="text-gray-900">{value}</span>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              )}
+              {product.category?.[0]?.name === "VGA" && product.vga_spec && (
+                <div className="mt-4">
+                  <h4 className="text-md font-semibold text-gray-800">VGA</h4>
+                  <ul className="mt-2 space-y-1">
+                    {Object.entries(product.vga_spec).map(
+                      ([key, value], index) => (
+                        <li key={index} className="flex justify-between">
+                          <span className="font-medium text-gray-700">
+                            {key}:
+                          </span>
+                          <span className="text-gray-900">{value}</span>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              )}
+              {product.category?.[0]?.name === "Headphone" &&
+                product.headphone_spec && (
+                  <div className="mt-4">
+                    <h4 className="text-md font-semibold text-gray-800">
+                      Tai nghe
+                    </h4>
+                    <ul className="mt-2 space-y-1">
+                      {Object.entries(product.headphone_spec).map(
+                        ([key, value], index) => (
+                          <li key={index} className="flex justify-between">
+                            <span className="font-medium text-gray-700">
+                              {key}:
+                            </span>
+                            <span className="text-gray-900">{value}</span>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                )}
+              {product.category?.[0]?.name === "Monitor" &&
+                product.monitor_spec && (
+                  <div className="mt-4">
+                    <h4 className="text-md font-semibold text-gray-800">
+                      Màn hình
+                    </h4>
+                    <ul className="mt-2 space-y-1">
+                      {Object.entries(product.monitor_spec).map(
+                        ([key, value], index) => (
+                          <li key={index} className="flex justify-between">
+                            <span className="font-medium text-gray-700">
+                              {key}:
+                            </span>
+                            <span className="text-gray-900">{value}</span>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                )}
+              {/* Add similar sections for other categories like "Mouse", "Keyboard", etc. */}
+              {Object.keys(product).every(
+                (key) =>
+                  ![
+                    "cpu_spec",
+                    "vga_spec",
+                    "headphone_spec",
+                    "mouse_pad_spec",
+                    "mouse_spec",
+                    "monitor_spec",
+                  ].includes(key)
+              ) && (
+                <p className="text-gray-600 mt-2">Chưa có thông số kỹ thuật.</p>
+              )}
+            </section>
           </motion.div>
 
           <motion.div
@@ -301,7 +391,6 @@ export default function ProductClient({ product }: { product: any }) {
                 </Button>
               </div>
             )}
-            
           </motion.div>
         </section>
       </main>

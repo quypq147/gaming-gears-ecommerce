@@ -540,7 +540,7 @@ export interface ApiKeyBoardSpecKeyBoardSpec
     singularName: 'key-board-spec';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     battery_life: Schema.Attribute.String;

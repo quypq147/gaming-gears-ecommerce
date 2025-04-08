@@ -32,8 +32,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { wishlist, addToWishlist, removeFromWishlist } =
-    useWishlistStore();
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlistStore();
   const { addToCart } = useCartStore();
 
   const isWishlisted = useMemo(
@@ -46,7 +45,6 @@ export default function ProductCard({ product }: ProductCardProps) {
       ? `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${product.image[0].url}`
       : placeholderImg;
 
-  // Ensure discountPercent is handled correctly
   const discountPercent = product.discountPercent ?? 0;
   const hasDiscount = discountPercent > 0;
   const finalPrice = hasDiscount
@@ -74,23 +72,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       whileTap={{ scale: 0.95 }}
       className="w-full"
     >
-      <Card key={product.id} className="w-full relative">
-        <CardHeader className="flex justify-between items-center">
-          <div>
-            <CardTitle className="text-lg font-semibold text-black">
-              {product.name}
-            </CardTitle>
-            <p className="text-gray-600 font-bold">
-              {product.brand.brand_name}
-            </p>
-          </div>
-
-          {/* Wishlist Button */}
-          <button onClick={toggleWishlist} className="text-red-500">
-            <Heart fill={isWishlisted ? "red" : "none"} className="w-6 h-6" />
-          </button>
-        </CardHeader>
-
+      <Card key={product.id} className="w-full relative flex flex-col">
         {/* Image Section */}
         <div className="relative">
           <Image
@@ -98,7 +80,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             alt={product.name}
             width={300}
             height={200}
-            className="w-full h-48 object-cover rounded"
+            className="w-full h-48 object-contain rounded-t bg-gray-100"
             priority
           />
           {hasDiscount && (
@@ -108,8 +90,22 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        <CardContent>
-          <div className="flex items-center gap-2">
+        {/* Product Info */}
+        <CardContent className="flex flex-col gap-2 p-4">
+          <CardHeader className="flex justify-between items-start">
+            <div>
+              <CardTitle className="text-lg font-semibold text-black">
+                {product.name}
+              </CardTitle>
+              <p className="text-gray-600 font-bold">
+                {product.brand.brand_name}
+              </p>
+            </div>
+            {/* Wishlist Button */}
+          </CardHeader>
+
+          {/* Price Section */}
+          <div className="flex items-center justify-around gap-2 ">
             {hasDiscount ? (
               <>
                 <p className="text-gray-500 line-through text-sm">
@@ -132,11 +128,16 @@ export default function ProductCard({ product }: ProductCardProps) {
                   currency: "VND",
                 }).format(product.price)}
               </p>
+              
             )}
+            <Button onClick={toggleWishlist} className="text-red-500 bg-white border border-black ">
+              <Heart fill={isWishlisted ? "red" : "none"} className="w-6 h-6" /> Yêu Thích
+            </Button>
           </div>
         </CardContent>
 
-        <CardFooter className="flex justify-between">
+        {/* Footer Buttons */}
+        <CardFooter className="flex justify-between p-4">
           <Link href={`/product/${product.slug}`}>
             <Button variant="outline">Xem chi tiết</Button>
           </Link>

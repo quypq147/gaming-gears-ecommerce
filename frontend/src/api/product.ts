@@ -6,6 +6,8 @@ import { axiosInstance } from "@/src/lib/axios";
 interface CpuBlock{
 
 }
+interface VgaBlock{}
+
 interface DescriptionBlock {
   type: string; // Loại của block, ví dụ: "heading", "paragraph"
   children: Array<{
@@ -19,6 +21,7 @@ interface DescriptionBlock {
 export interface Product {
   id: number;
   documentId: string;
+  category: any[];
   name: string;
   price: number;
   brand: any[];
@@ -32,6 +35,13 @@ export interface Product {
   publishedAt: string;
   description: DescriptionBlock[];
   reviews: Review[];
+  key_board_spec?: { [key: string]: string }; // Thông số kỹ thuật bàn phím
+  cpu_spec?: { [key: string]: string }; // Thông số kỹ thuật CPU
+  headphone_spec?: { [key: string]: string }; // Thông số kỹ thuật tai nghe
+  mouse_pad_spec?: { [key: string]: string }; // Thông số kỹ thuật lót chuột
+  mouse_spec?: { [key: string]: string }; // Thông số kỹ thuật chuột
+  vga_spec?: { [key: string]: string }; // Thông số kỹ thuật VGA
+  monitor_spec?: { [key: string]: string }; // Thông số kỹ thuật màn hình
 }
 
 export interface Review {
@@ -56,6 +66,7 @@ export const getProducts = async (): Promise<Product[]> => {
         id: item.id,
         documentId: item.documentId,
         name: item.name,
+        category: item.category.name || [],
         price: item.price,
         brand: item.brand || [],
         slug: item.slug,
@@ -81,7 +92,7 @@ export const getProductBySlug = async (slug: string): Promise<Product> => {
     const { data } = await axiosInstance.get(`/products`, {
       params: {
         "filters[slug][$eq]": slug,
-        populate: "reviews",
+        populate: "*",
       },
     });
 
@@ -90,13 +101,23 @@ export const getProductBySlug = async (slug: string): Promise<Product> => {
     }
 
     const product = data.data[0];
+    console.log("Product Detail Data" , product);
     return {
       id: product.id,
       name: product.name,
+      category: product.category || [],
       price: product.price,
+      image: product.image || [],
       brand: product.brand || [],
       description: product.description || [], 
       reviews: product.reviews || [],
+      key_board_spec: product.key_board_spec || {},
+      cpu_spec: product.cpu_spec || {},
+      headphone_spec: product.headphone_spec || {},
+      mouse_pad_spec: product.mouse_pad_spec || {},
+      mouse_spec: product.mouse_spec || {},
+      vga_spec: product.vga_spec || {},
+      monitor_spec: product.monitor_spec || {},
     };
   } catch (error: any) {
     console.error("Error fetching product by slug:", error.message || error);

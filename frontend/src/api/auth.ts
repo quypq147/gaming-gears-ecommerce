@@ -1,9 +1,8 @@
-import { axiosInstance } from '@/lib/axios';
-import { useUserStore } from '@/store/userStore';
-import { useWishlistStore } from '@/store/wishlistStore';
-import { useCartStore } from '@/store/cartStore';
-import { fetchCartByUser, updateCartOnServer } from '@/api/cart';
-import { fetchWishlistByUser, updateWishlistOnServer } from '@/api/wishlist';
+import { axiosInstance } from '@/src/lib/axios';
+import { useUserStore } from '@/src/store/userStore';
+import { useCartStore } from '@/src/store/cartStore';
+import { fetchCartByUser, updateCartOnServer } from '@/src/api/cart';
+import { fetchWishlistByUser, updateWishlistOnServer } from '@/src/api/wishlist';
 
 interface AuthResponse {
   jwt: string;

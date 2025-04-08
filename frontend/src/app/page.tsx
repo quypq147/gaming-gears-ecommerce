@@ -75,7 +75,7 @@ export default async function HomePage() {
         {/* Top Products Section */}
         <section className="p-4 md:p-5">
           <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black">
-            Sản phẩm trending
+            Sản phẩm nổi bật
           </h2>
           <ProductList
             products={products.filter((p: any) => p.trending).slice(0, 4)}

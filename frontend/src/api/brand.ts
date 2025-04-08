@@ -11,7 +11,6 @@ export const fetchBrands = async () => {
         populate: '*', // Include all related data
       },
     });
-    console.log('Fetched brands:', response.data); // Log the fetched brands
     return response.data.data;
   } catch (error) {
     console.error('Error fetching brands:', error);

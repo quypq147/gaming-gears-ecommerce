@@ -14,7 +14,9 @@ import { fetchReviews, submitReview } from "@/src/api/review";
 import placeholderImg from "@/src/assets/placeholder.png";
 import Header from "./header";
 
+
 export default function ProductClient({ product }: { product: any }) {
+
   const router = useRouter();
   const { addToCart } = useCartStore();
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlistStore();
@@ -64,7 +66,7 @@ export default function ProductClient({ product }: { product: any }) {
     }
   };
 
-  // Xử lý gửi bình luận
+  
   // Xử lý gửi bình luận
   const handleSubmitReview = async () => {
     if (!user) {
@@ -158,8 +160,47 @@ export default function ProductClient({ product }: { product: any }) {
               }).format(product.price)}
             </p>
             <div className="text-gray-700 mt-2 space-y-4">
-              {product.description ? (
-                <p className="leading-relaxed">{product.description}</p>
+              {product.description && product.description.length > 0 ? (
+                product.description.map((block: any, index: number) => {
+                  if (block.type === "heading") {
+                    return (
+                      <h3
+                        key={index}
+                        className={`text-${block.level}xl font-bold`}
+                      >
+                        {block.children
+                          .map((child: any, childIndex: number) => child.text)
+                          .join("")}
+                      </h3>
+                    );
+                  } else if (block.type === "paragraph") {
+                    return (
+                      <p key={index} className="leading-relaxed">
+                        {block.children.map(
+                          (child: any, childIndex: number) => {
+                            if (child.type === "link") {
+                              return (
+                                <a
+                                  key={childIndex}
+                                  href={child.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-500 underline"
+                                >
+                                  {child.children
+                                    ?.map((linkChild: any) => linkChild.text)
+                                    .join("")}
+                                </a>
+                              );
+                            }
+                            return child.text;
+                          }
+                        )}
+                      </p>
+                    );
+                  }
+                  return null;
+                })
               ) : (
                 <p className="text-gray-500">Chưa có mô tả.</p>
               )}
@@ -260,6 +301,7 @@ export default function ProductClient({ product }: { product: any }) {
                 </Button>
               </div>
             )}
+            
           </motion.div>
         </section>
       </main>

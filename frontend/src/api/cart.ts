@@ -28,7 +28,7 @@ export const createCart = async (cart) => {
       { products: cart },
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Gửi token trong header
+          Authorization: `Bearer ${localStorage.getItem('token')}`, 
         },
       }
     );

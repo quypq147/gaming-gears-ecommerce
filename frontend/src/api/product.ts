@@ -35,13 +35,13 @@ export interface Product {
   publishedAt: string;
   description: DescriptionBlock[];
   reviews: Review[];
-  key_board_spec?: { [key: string]: string }; // Thông số kỹ thuật bàn phím
-  cpu_spec?: { [key: string]: string }; // Thông số kỹ thuật CPU
-  headphone_spec?: { [key: string]: string }; // Thông số kỹ thuật tai nghe
-  mouse_pad_spec?: { [key: string]: string }; // Thông số kỹ thuật lót chuột
-  mouse_spec?: { [key: string]: string }; // Thông số kỹ thuật chuột
-  vga_spec?: { [key: string]: string }; // Thông số kỹ thuật VGA
-  monitor_spec?: { [key: string]: string }; // Thông số kỹ thuật màn hình
+  key_board_spec?: { [key: string]: string }; 
+  cpu_spec?: { [key: string]: string }; 
+  headphone_spec?: { [key: string]: string }; 
+  mouse_pad_spec?: { [key: string]: string }; 
+  mouse_spec?: { [key: string]: string }; 
+  vga_spec?: { [key: string]: string }; 
+  monitor_spec?: { [key: string]: string }; 
 }
 
 export interface Review {
@@ -101,7 +101,6 @@ export const getProductBySlug = async (slug: string): Promise<Product> => {
     }
 
     const product = data.data[0];
-    console.log("Product Detail Data" , product);
     return {
       id: product.id,
       name: product.name,

@@ -27,14 +27,11 @@ export default function ProductClient({ product }: { product: any }) {
   const imageUrl = product?.image[0].url
     ? `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${product.image[0].url}`
     : placeholderImg;
-  console.log("Product Image URL:", product?.image.url);
-  console.log("Image URL:", imageUrl);
   // Lấy danh sách đánh giá
   useEffect(() => {
     const loadReviews = async () => {
       try {
         const fetchedReviews = await fetchReviews(product.id);
-        console.log("Reviews in Component:", fetchedReviews);
         setReviews(fetchedReviews);
       } catch (error: any) {
         console.error("Error fetching reviews:", error.message);
@@ -121,7 +118,7 @@ export default function ProductClient({ product }: { product: any }) {
               Thông số kỹ thuật
             </h3>
             <section className="mt-8">
-              {product.category?.[0]?.name === "CPU" && product.cpu_spec && (
+              {product.category?.name === "cpu" && product.cpu_spec && (
                 <div className="mt-4">
                   <h4 className="text-md font-semibold text-gray-800">CPU</h4>
                   <ul className="mt-2 space-y-1">
@@ -138,9 +135,8 @@ export default function ProductClient({ product }: { product: any }) {
                   </ul>
                 </div>
               )}
-              {product.category?.[0]?.name === "VGA" && product.vga_spec && (
+              {product.category?.name === "vga" && product.vga_spec && (
                 <div className="mt-4">
-                  <h4 className="text-md font-semibold text-gray-800">VGA</h4>
                   <ul className="mt-2 space-y-1">
                     {Object.entries(product.vga_spec).map(
                       ([key, value], index) => (
@@ -149,18 +145,17 @@ export default function ProductClient({ product }: { product: any }) {
                             {key}:
                           </span>
                           <span className="text-gray-900">{value}</span>
+                          
                         </li>
                       )
                     )}
                   </ul>
                 </div>
               )}
-              {product.category?.[0]?.name === "Headphone" &&
+              {product.category?.name === "headphone" &&
                 product.headphone_spec && (
                   <div className="mt-4">
-                    <h4 className="text-md font-semibold text-gray-800">
-                      Tai nghe
-                    </h4>
+                    
                     <ul className="mt-2 space-y-1">
                       {Object.entries(product.headphone_spec).map(
                         ([key, value], index) => (
@@ -175,12 +170,10 @@ export default function ProductClient({ product }: { product: any }) {
                     </ul>
                   </div>
                 )}
-              {product.category?.[0]?.name === "Monitor" &&
+              {product.category?.name === "monitor" &&
                 product.monitor_spec && (
                   <div className="mt-4">
-                    <h4 className="text-md font-semibold text-gray-800">
-                      Màn hình
-                    </h4>
+                    
                     <ul className="mt-2 space-y-1">
                       {Object.entries(product.monitor_spec).map(
                         ([key, value], index) => (

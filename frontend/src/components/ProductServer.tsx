@@ -36,6 +36,7 @@ export default async function ProductServer({
   if (!params?.slug) return notFound();
 
   const product = await getProductBySlug(params.slug);
+  console.log("Product Detail Data" , product);
   if (!product) return notFound();
 
   return <ProductClient product={product} />;

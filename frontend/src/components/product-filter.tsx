@@ -20,7 +20,7 @@ interface FilterOption {
 
 interface ProductFilterProps {
   brands: string[];
-  categories: { id: string; name: string }[];
+  categories: string[];
   onFilter?: (filter: FilterOption) => void;
 }
 
@@ -31,8 +31,9 @@ export default function ProductFilter({
 }: ProductFilterProps) {
   const [selectBrand, setSelectBrand] = useState<string>("");
   const [selectCategory, setSelectCategory] = useState<string>("");
-  const [price, setPrice] = useState<number>(10000000); // Mặc định 10 triệu VNĐ
+  const [price, setPrice] = useState<number>(10000000);
   const [search, setSearch] = useState<string>("");
+  console.log("Categories :", categories);
 
   useEffect(() => {
     onFilter({ brand: selectBrand, category: selectCategory, price, search });
@@ -47,64 +48,88 @@ export default function ProductFilter({
   };
 
   return (
-    <div className="flex flex-wrap gap-4 items-center justify-center my-4">
+    <div className="flex flex-wrap gap-6 items-center justify-center my-6 bg-white p-4 rounded-lg shadow-md">
       {/* Search Bar */}
-      <Input
-        type="text"
-        placeholder="Search product..."
-        className="w-60"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <div className="flex flex-col items-start">
+        <label htmlFor="search" className="text-sm font-medium text-gray-700">
+          Tìm kiếm sản phẩm
+        </label>
+        <Input
+          id="search"
+          type="text"
+          placeholder="Nhập tên sản phẩm..."
+          className="w-64"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
       {/* Brand Filter */}
-      <Select
-        onValueChange={(value) => setSelectBrand(value === "All" ? "" : value)}
-      >
-        <SelectTrigger className="w-40">
-          <SelectValue placeholder="Select Brand" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="All">All</SelectItem>
-          {brands.map((brand, idx) => (
-            <SelectItem key={idx} value={brand}>
-              {brand.toUpperCase()}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className="flex flex-col items-start">
+        <label htmlFor="brand" className="text-sm font-medium text-gray-700">
+          Lọc theo thương hiệu
+        </label>
+        <Select
+          onValueChange={(value) =>
+            setSelectBrand(value === "All" ? "" : value)
+          }
+        >
+          <SelectTrigger id="brand" className="w-48">
+            <SelectValue placeholder="Chọn thương hiệu" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="All">Tất cả</SelectItem>
+            {brands.map((brand, idx) => (
+              <SelectItem key={idx} value={brand}>
+                {brand.toUpperCase()}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       {/* Category Filter */}
-      <Select
-        onValueChange={(value) =>
-          setSelectCategory(value === "All" ? "" : value)
-        }
-      >
-        <SelectTrigger className="w-40">
-          <SelectValue placeholder="Select Category" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="All">All</SelectItem>
-          {categories.map((cat) => (
-            <SelectItem key={cat.id} value={cat.id}>
-              {cat.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className="flex flex-col items-start">
+        <label htmlFor="category" className="text-sm font-medium text-gray-700">
+          Lọc theo loại sản phẩm
+        </label>
+        <Select
+          onValueChange={(value) =>
+            setSelectCategory(value === "All" ? "" : value)
+          }
+        >
+          <SelectTrigger id="category" className="w-48">
+            <SelectValue placeholder="Chọn loại sản phẩm" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="All">Tất cả</SelectItem>
+            {categories.map((cat, index) => (
+              <SelectItem key={index} value={cat}>
+                {cat.toUpperCase()} 
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       {/* Price Slider */}
-      <div className="flex flex-col items-center">
-        <span className="text-sm font-medium">
-          Giá tối đa: {price.toLocaleString("vi-VN")}₫
-        </span>
+      <div className="flex flex-col items-start">
+        <label htmlFor="price" className="text-sm font-medium text-gray-700">
+          Giá tối đa
+        </label>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-gray-600">
+            {formatCurrency(price)}
+          </span>
+        </div>
         <Slider
+          id="price"
           value={[price]}
           onValueChange={(val) => setPrice(val[0])}
           min={0}
           max={100000000}
           step={50000}
-          className="w-40"
+          className="w-64"
         />
       </div>
     </div>

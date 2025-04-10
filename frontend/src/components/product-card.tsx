@@ -26,7 +26,7 @@ interface ProductCardProps {
     slug: string;
     brand: { brand_name: string };
     price: number;
-    discountPercent?: number | null; // Can be null
+    discountPercent?: number | null;
     image: { url: string }[];
   };
 }
@@ -98,7 +98,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 {product.name}
               </CardTitle>
               <p className="text-gray-600 font-bold">
-                {product.brand.brand_name}
+                {product.brand.brand_name.toUpperCase()}
               </p>
             </div>
             {/* Wishlist Button */}

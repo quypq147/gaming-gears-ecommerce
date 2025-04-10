@@ -66,7 +66,7 @@ export const getProducts = async (): Promise<Product[]> => {
         id: item.id,
         documentId: item.documentId,
         name: item.name,
-        category: item.category.name || [],
+        category: item.category || {},
         price: item.price,
         brand: item.brand || [],
         slug: item.slug,

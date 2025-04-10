@@ -46,6 +46,8 @@ export default function SignInForm() {
         const user = response.user;
         setUser(user);
 
+        localStorage.setItem("userId", user.id);
+
         router.push(`/user/${user.id}`);
       } else {
         setError("Email hoặc mật khẩu không hợp lệ");

@@ -14,26 +14,37 @@ export default function ShopPageClient({ products = [] }) {
     setFilteredProducts(products);
   }, [products]);
 
-  // Memoized brands and categories extraction (lowercased for consistency)
+  // Memoized brands and categories extraction
   const brands = useMemo(
-    () => [...new Set(products.map((p) => p.brand?.brand_name?.toLowerCase()).filter(Boolean))],
+    () =>
+      [...new Set(products.map((p) => p.brand?.brand_name?.toLowerCase()))].filter(
+        Boolean
+      ),
     [products]
   );
 
   const categories = useMemo(
-    () => [...new Set(products.map((p) => p.category?.name?.toLowerCase()).filter(Boolean))],
+    () =>
+      [...new Set(products.map((p) => p.category?.name).filter(Boolean))],
     [products]
   );
 
   // Optimized filtering function
   const handleFilter = useCallback(
-    ({ brand, category }) => {
+    ({ brand, category, price, search }) => {
       setFilteredProducts(
-        allProducts.filter(
-          (product) =>
-            (!brand || product.brand?.brand_name?.toLowerCase() === brand) &&
-            (!category || product.category?.name?.toLowerCase() === category)
-        )
+        allProducts.filter((product) => {
+          const matchesBrand =
+            !brand || product.brand?.brand_name?.toLowerCase() === brand;
+          const matchesCategory =
+            !category || product.category?.name?.toLowerCase() === category;
+          const matchesPrice = product.price <= price;
+          const matchesSearch =
+            !search ||
+            product.name.toLowerCase().includes(search.toLowerCase());
+
+          return matchesBrand && matchesCategory && matchesPrice && matchesSearch;
+        })
       );
     },
     [allProducts]
@@ -60,7 +71,11 @@ export default function ShopPageClient({ products = [] }) {
       <Header />
       {products.length > 0 ? (
         <>
-          <ProductFilter brands={brands} categories={categories} onFilter={handleFilter} />
+          <ProductFilter
+            brands={brands}
+            categories={categories}
+            onFilter={handleFilter}
+          />
           <motion.section
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4"
             variants={containerVariants}
@@ -74,12 +89,12 @@ export default function ShopPageClient({ products = [] }) {
                 </motion.div>
               ))
             ) : (
-              <p>No products available.</p>
+              <p className="text-center text-gray-500">Không có sản phẩm nào.</p>
             )}
           </motion.section>
         </>
       ) : (
-        <p className="text-center text-gray-500 mt-10">Loading products...</p>
+        <p className="text-center text-gray-500 mt-10">Đang tải sản phẩm...</p>
       )}
     </main>
   );

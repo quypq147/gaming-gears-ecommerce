@@ -14,11 +14,20 @@ export const fetchUserById = async (userId: string) => {
     console.log("User data:", response.data);
     return response.data;
   } catch (error: any) {
-    console.error("Error fetching user:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || "Failed to fetch user data");
+    console.error(
+      "Error fetching user:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch user data"
+    );
   }
 };
-export const updateUser = async (userId : string , userData: any) => {
+export const changePassword = async (
+  userId: string,
+  oldPassword: string,
+  newPassword: string
+) => {
   try {
     const token = useUserStore.getState().token;
     const headers: Record<string, string> = {};
@@ -27,15 +36,47 @@ export const updateUser = async (userId : string , userData: any) => {
       headers.Authorization = `Bearer ${token}`;
     }
 
-    const response = await axiosInstance.put(`/users/${userId}`, userData, { headers });
+    const response = await axiosInstance.put(
+      `/auth/local/change-password`,
+      { userId, oldPassword, newPassword },
+      { headers }
+    );
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "Error changing password:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || "Failed to change password"
+    );
+  }
+};
+export const updateUser = async (userId: string, userData: any) => {
+  try {
+    const token = useUserStore.getState().token;
+    const headers: Record<string, string> = {};
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await axiosInstance.put(`/users/${userId}`, userData, {
+      headers,
+    });
     return response.data;
   } catch (error: any) {
     console.log("Data to update:", userData);
-    console.error("Error updating user:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || "Failed to update user data");
+    console.error(
+      "Error updating user:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || "Failed to update user data"
+    );
   }
-}
-export const signIn = async ( email: string, password: string) => {
+};
+export const signIn = async (email: string, password: string) => {
   try {
     const response = await axiosInstance.post("/auth/local", {
       identifier: email,
@@ -47,7 +88,11 @@ export const signIn = async ( email: string, password: string) => {
     throw new Error(error.response?.data?.message || "Failed to sign in");
   }
 };
-export const signUp = async (username: string, email: string, password: string) => {
+export const signUp = async (
+  username: string,
+  email: string,
+  password: string
+) => {
   try {
     const response = await axiosInstance.post("/auth/local/register", {
       username,
@@ -60,4 +105,3 @@ export const signUp = async (username: string, email: string, password: string) 
     throw new Error(error.response?.data?.message || "Failed to sign up");
   }
 };
-

@@ -120,9 +120,8 @@ export default function ProductClient({ product }: { product: any }) {
             <section className="mt-8">
               {product.category?.name === "cpu" && product.cpu_spec && (
                 <div className="mt-4">
-                  <h4 className="text-md font-semibold text-gray-800">CPU</h4>
                   <ul className="mt-2 space-y-1">
-                    {Object.entries(product.cpu_spec).map(
+                    {Object.entries(product.cpu_spec).filter(([key]) => !["id", "documentId", "createdAt", "updatedAt", "publishedAt"].includes(key)).map(
                       ([key, value], index) => (
                         <li key={index} className="flex justify-between">
                           <span className="font-medium text-gray-700">
@@ -138,7 +137,7 @@ export default function ProductClient({ product }: { product: any }) {
               {product.category?.name === "vga" && product.vga_spec && (
                 <div className="mt-4">
                   <ul className="mt-2 space-y-1">
-                    {Object.entries(product.vga_spec).map(
+                    {Object.entries(product.vga_spec).filter(([key]) => !["id", "documentId", "createdAt", "updatedAt", "publishedAt"].includes(key)).map(
                       ([key, value], index) => (
                         <li key={index} className="flex justify-between">
                           <span className="font-medium text-gray-700">
@@ -157,7 +156,7 @@ export default function ProductClient({ product }: { product: any }) {
                   <div className="mt-4">
                     
                     <ul className="mt-2 space-y-1">
-                      {Object.entries(product.headphone_spec).map(
+                      {Object.entries(product.headphone_spec).filter(([key]) => !["id", "documentId", "createdAt", "updatedAt", "publishedAt"].includes(key)).map(
                         ([key, value], index) => (
                           <li key={index} className="flex justify-between">
                             <span className="font-medium text-gray-700">
@@ -175,7 +174,7 @@ export default function ProductClient({ product }: { product: any }) {
                   <div className="mt-4">
                     
                     <ul className="mt-2 space-y-1">
-                      {Object.entries(product.monitor_spec).map(
+                      {Object.entries(product.monitor_spec).filter(([key]) => !["id", "documentId", "createdAt", "updatedAt", "publishedAt"].includes(key)).map(
                         ([key, value], index) => (
                           <li key={index} className="flex justify-between">
                             <span className="font-medium text-gray-700">
